@@ -1,20 +1,24 @@
 import 'package:flutter/material.dart';
-
 import 'Portfolio/portfolio_view.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const PortfolioApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class PortfolioApp extends StatelessWidget {
+  const PortfolioApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
+      title: 'Flutter Developer Portfolio',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+        fontFamily: 'Segoe UI',
+      ),
+      home:  PortfolioHomePage(),
       debugShowCheckedModeBanner: false,
-      home: PortfolioHome(),
     );
   }
 }
