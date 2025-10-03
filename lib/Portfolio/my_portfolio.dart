@@ -1,6 +1,10 @@
+import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'dart:math' as math;
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server/gmail.dart';
@@ -89,24 +93,46 @@ class PortfolioHomeState extends State<PortfolioHome> with TickerProviderStateMi
     _rainbowController.repeat();
   }
 
+  // void _onScroll() {
+  //   bool isScrolled = _scrollController.offset > 100;
+  //   double progress = (_scrollController.offset / MediaQuery.of(context).size.height).clamp(0.0, 1.0);
+  //
+  //   if (_isScrolled != isScrolled) {
+  //     setState(() => _isScrolled = isScrolled);
+  //   }
+  //
+  //   if (_scrollProgress != progress) {
+  //     setState(() => _scrollProgress = progress);
+  //
+  //     if (_scrollController.offset > 50) {
+  //       _scrollAnimationController.forward();
+  //     } else {
+  //       _scrollAnimationController.reverse();
+  //     }
+  //   }
+  // }
+
+  Timer? _scrollDebounce;
+
   void _onScroll() {
-    bool isScrolled = _scrollController.offset > 100;
-    double progress = (_scrollController.offset / MediaQuery.of(context).size.height).clamp(0.0, 1.0);
+    if (_scrollDebounce?.isActive ?? false) _scrollDebounce!.cancel();
 
-    if (_isScrolled != isScrolled) {
-      setState(() => _isScrolled = isScrolled);
-    }
+    _scrollDebounce = Timer(const Duration(milliseconds: 50), () {
+      bool isScrolled = _scrollController.offset > 100;
+      double progress = (_scrollController.offset / MediaQuery.of(context).size.height).clamp(0.0, 1.0);
 
-    if (_scrollProgress != progress) {
-      setState(() => _scrollProgress = progress);
+      if (_isScrolled != isScrolled) {
+        setState(() => _isScrolled = isScrolled);
+      }
 
-      if (_scrollController.offset > 50) {
+      if (_scrollController.offset > 50 && !_scrollAnimationController.isCompleted) {
         _scrollAnimationController.forward();
-      } else {
+      } else if (_scrollController.offset <= 50 && !_scrollAnimationController.isDismissed) {
         _scrollAnimationController.reverse();
       }
-    }
+    });
   }
+
 
   @override
   void dispose() {
@@ -621,7 +647,7 @@ class PortfolioHomeState extends State<PortfolioHome> with TickerProviderStateMi
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildSectionTitle('Skills & Expertise'),
+            Center(child: _buildSectionTitle('Skills & Expertise')),
             const SizedBox(height: 30),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -646,70 +672,69 @@ class PortfolioHomeState extends State<PortfolioHome> with TickerProviderStateMi
       [Color(0xFF2ecc71).withOpacity(0.9), Color(0xFF27ae60).withOpacity(0.9)],
     ];
 
-    return Container(
-      padding: EdgeInsets.all(40),
-      decoration: BoxDecoration(
-        color: widget.isDarkMode
-            ? Color(0xFF1a1a1a).withOpacity(0.8)
-            : Colors.white.withOpacity(0.9),
-        borderRadius: BorderRadius.circular(25),
-        border: Border.all(
-          color: Color(0xFF1abc9c).withOpacity(0.2),
-          width: 1,
+    return Center(
+      child: Container(
+        width: 300,
+        padding: EdgeInsets.all(40),
+        decoration: BoxDecoration(
+          color: widget.isDarkMode ? Color(0xFF1a1a1a).withOpacity(0.8) : Colors.white.withOpacity(0.9),
+          borderRadius: BorderRadius.circular(25),
+          border: Border.all(
+            color: Color(0xFF1abc9c).withOpacity(0.2), width: 1,),
+          boxShadow: [
+            BoxShadow(
+              color: Color(0xFF1abc9c).withOpacity(0.2),
+              blurRadius: 30,
+              offset: Offset(0, 15),
+            ),
+          ],
         ),
-        boxShadow: [
-          BoxShadow(
-            color: Color(0xFF1abc9c).withOpacity(0.2),
-            blurRadius: 30,
-            offset: Offset(0, 15),
-          ),
-        ],
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            width: 80,
-            height: 80,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(colors: gradients[index % gradients.length]),
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(
-                color: Colors.white.withOpacity(0.2),
-                width: 1,
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: gradients[index % gradients.length][0].withOpacity(0.5),
-                  blurRadius: 20,
-                  offset: Offset(0, 8),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 80,
+              height: 80,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(colors: gradients[index % gradients.length]),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(
+                  color: Colors.white.withOpacity(0.2),
+                  width: 1,
                 ),
-              ],
+                boxShadow: [
+                  BoxShadow(
+                    color: gradients[index % gradients.length][0].withOpacity(0.5),
+                    blurRadius: 20,
+                    offset: Offset(0, 8),
+                  ),
+                ],
+              ),
+              child:
+              Icon(skill['icon'], size: 32, color: Colors.white,),
             ),
-            child:
-            Icon(skill['icon'], size: 32, color: Colors.white,),
-          ),
-          SizedBox(height: 25),
-          Text(
-            skill['title'],
-            style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.w700,
-              color: widget.isDarkMode ? Colors.white : Colors.black,
+            SizedBox(height: 25),
+            Text(
+              skill['title'],
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.w700,
+                color: widget.isDarkMode ? Colors.white : Colors.black,
+              ),
+              textAlign: TextAlign.center,
             ),
-            textAlign: TextAlign.center,
-          ),
-          SizedBox(height: 20),
-          Text(
-            skill['description'],
-            style: TextStyle(
-              fontSize: 16,
-              color: widget.isDarkMode ? Colors.white.withOpacity(0.8) : Colors.black.withOpacity(0.7),
-              height: 1.6,
+            SizedBox(height: 20),
+            Text(
+              skill['description'],
+              style: TextStyle(
+                fontSize: 16,
+                color: widget.isDarkMode ? Colors.white.withOpacity(0.8) : Colors.black.withOpacity(0.7),
+                height: 1.6,
+              ),
+              textAlign: TextAlign.center,
             ),
-            textAlign: TextAlign.center,
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -742,7 +767,7 @@ class PortfolioHomeState extends State<PortfolioHome> with TickerProviderStateMi
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildSectionTitle('Featured Projects'),
+            Center(child: _buildSectionTitle('Featured Projects')),
             SizedBox(height: 30),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -800,13 +825,13 @@ class PortfolioHomeState extends State<PortfolioHome> with TickerProviderStateMi
               ),
             ),
             child: ClipRRect(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(25),
-                topRight: Radius.circular(25)
-              ),
-              child: Image.asset(project['image'],
-                fit: BoxFit.contain,
-              )
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(25),
+                    topRight: Radius.circular(25)
+                ),
+                child: Image.asset(project['image'],
+                  fit: BoxFit.contain,
+                )
 
             ),
           ),
@@ -820,9 +845,9 @@ class PortfolioHomeState extends State<PortfolioHome> with TickerProviderStateMi
                 ),
                 SizedBox(height: 20),
                 Text(project['description'], style: TextStyle(fontSize: 16,
-                    color: widget.isDarkMode ? Colors.white.withOpacity(0.8) : Colors.black.withOpacity(0.7),
-                    height: 1.7,
-                  ),
+                  color: widget.isDarkMode ? Colors.white.withOpacity(0.8) : Colors.black.withOpacity(0.7),
+                  height: 1.7,
+                ),
                 ),
                 SizedBox(height: 25),
                 Wrap(
@@ -852,7 +877,7 @@ class PortfolioHomeState extends State<PortfolioHome> with TickerProviderStateMi
                     children: [
                       Text('View Project',
                         style: TextStyle(
-                        color: gradients[index % gradients.length][0],
+                          color: gradients[index % gradients.length][0],
                           fontWeight: FontWeight.w700,
                           fontSize: 16,
                         ),
@@ -972,10 +997,10 @@ class PortfolioHomeState extends State<PortfolioHome> with TickerProviderStateMi
                           if (value?.isEmpty ?? true) return 'Please enter your email';
                           if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
                               .hasMatch(value!)) {
-                          return 'Please enter a valid email';
+                            return 'Please enter a valid email';
                           }
                           return null;
-                          },
+                        },
                       ),
                       SizedBox(height: 25),
                       _buildContactField(
@@ -1020,7 +1045,13 @@ class PortfolioHomeState extends State<PortfolioHome> with TickerProviderStateMi
                         child: Material(
                           color: Colors.transparent,
                           child: InkWell(
-                            onTap: _sendMessage,
+                            onTap: (){
+                              sendEmail(
+                                _nameController.text.trim(),
+                                _emailController.text.trim(),
+                                _messageController.text.trim(),
+                              );
+                            },
                             borderRadius: BorderRadius.circular(15),
                             child: Padding(
                               padding: EdgeInsets.symmetric(vertical: 20),
@@ -1278,7 +1309,10 @@ class PortfolioHomeState extends State<PortfolioHome> with TickerProviderStateMi
       final filePath = "${downloadsDir.path}/Faireena_cv.pdf";
 
       await Dio().download(
-        "https://raw.githubusercontent.com/faireenazaidi/myportfolio/main/Faireena_Resume-1.pdf",
+        //"https://raw.githubusercontent.com/faireenazaidi/myportfolio/main/Faireena_Resume-1.pdf",
+       // "https://github.com/faireenazaidi/my_portfolio_/blob/main/Faireena_Resume-1.pdf",
+        "https://raw.githubusercontent.com/faireenazaidi/my_portfolio_/main/Faireena_Resume-1.pdf",
+
         filePath,
         onReceiveProgress: (received, total) {
           if (total != -1) {
@@ -1290,8 +1324,8 @@ class PortfolioHomeState extends State<PortfolioHome> with TickerProviderStateMi
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-         //content: Text("CV downloaded to: ${downloadsDir.path}"),
-          content: Text("CV downloaded"),
+          //content: Text("CV downloaded to: ${downloadsDir.path}"),
+          content: Text("CV downloaded successfully!"),
           backgroundColor: Colors.green,
         ),
       );
@@ -1305,89 +1339,167 @@ class PortfolioHomeState extends State<PortfolioHome> with TickerProviderStateMi
     }
   }
 
-  Future<void> _sendMessage() async {
-    if (_formKey.currentState?.validate() ?? false) {
-      final name = _nameController.text.trim();
-      final email = _emailController.text.trim();
-      final messageText = _messageController.text.trim();
+  // Future<void> _sendMessage() async {
+  //   if (_formKey.currentState?.validate() ?? false) {
+  //     final name = _nameController.text.trim();
+  //     final email = _emailController.text.trim();
+  //     final messageText = _messageController.text.trim();
+  //
+  //     String username = 'faireenazaidi7@gmail.com';
+  //     String password = 'frcprakwyztkpshi';
+  //
+  //     final smtpServer = gmail(username, password);
+  //
+  //     final message = Message()
+  //       ..from = Address(username, 'Faireena Portfolio')
+  //       ..recipients.add('faireenazaidi7@gmail.com')
+  //       ..subject = 'New Contact from Portfolio: $name'
+  //       ..text = '''
+  //      New Message from your Portfolio:
+  //      Name: $name
+  //      Email: $email
+  //      Message: $messageText
+  //     ''';
+  //
+  //     try {
+  //       final sendReport = await send(message, smtpServer);
+  //       print('Message sent: $sendReport');
+  //
+  //       ScaffoldMessenger.of(context).showSnackBar(
+  //         SnackBar(
+  //           content: Container(
+  //             padding: EdgeInsets.symmetric(vertical: 8),
+  //             child: Row(
+  //               children: [
+  //                 Container(
+  //                   padding: EdgeInsets.all(8),
+  //                   decoration: BoxDecoration(
+  //                     gradient: LinearGradient(colors: [Color(0xFF1abc9c), Color(0xFF16a085)]),
+  //                     borderRadius: BorderRadius.circular(20),
+  //                   ),
+  //                   child: Icon(Icons.check_circle, color: Colors.white, size: 20),
+  //                 ),
+  //                 SizedBox(width: 16),
+  //                 Expanded(
+  //                   child: Text(
+  //                     "Message sent successfully!",
+  //                     style: TextStyle(
+  //                       fontWeight: FontWeight.w600,
+  //                       color: Colors.white,
+  //                     ),
+  //                   ),
+  //                 ),
+  //               ],
+  //             ),
+  //           ),
+  //           backgroundColor: Color(0xFF1abc9c).withOpacity(0.9),
+  //           behavior: SnackBarBehavior.floating,
+  //           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+  //           margin: EdgeInsets.all(20),
+  //         ),
+  //       );
+  //
+  //       _nameController.clear();
+  //       _emailController.clear();
+  //       _messageController.clear();
+  //
+  //     } on MailerException catch (e) {
+  //       print('Message not sent.');
+  //       for (var p in e.problems) {
+  //         print('Problem: ${p.code}: ${p.msg}');
+  //       }
+  //
+  //       ScaffoldMessenger.of(context).showSnackBar(
+  //         SnackBar(
+  //           content: Text("Failed to send message."),
+  //           backgroundColor: Colors.red.shade400,
+  //           behavior: SnackBarBehavior.floating,
+  //           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+  //           margin: EdgeInsets.all(20),
+  //         ),
+  //       );
+  //     }
+  //   }
+  // }
+  Future<void> sendEmail(String name, String email, String message) async {
+    const serviceId = 'service_4qriy3e';
+    const templateId = 'template_i2gwxjr';
+    const userId = 'kTxK3Gf8mAWpPbxHC';
 
-      String username = 'faireenazaidi7@gmail.com';
-      String password = 'frcprakwyztkpshi';
-
-      final smtpServer = gmail(username, password);
-
-      final message = Message()
-        ..from = Address(username, 'Faireena Portfolio')
-        ..recipients.add('faireenazaidi7@gmail.com')
-        ..subject = 'New Contact from Portfolio: $name'
-        ..text = '''
-       New Message from your Portfolio:
-       Name: $name
-       Email: $email
-       Message: $messageText
-      ''';
-
-      try {
-        final sendReport = await send(message, smtpServer);
-        print('Message sent: $sendReport');
-
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Container(
-              padding: EdgeInsets.symmetric(vertical: 8),
-              child: Row(
-                children: [
-                  Container(
-                    padding: EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(colors: [Color(0xFF1abc9c), Color(0xFF16a085)]),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Icon(Icons.check_circle, color: Colors.white, size: 20),
-                  ),
-                  SizedBox(width: 16),
-                  Expanded(
-                    child: Text(
-                      "Message sent successfully!",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            backgroundColor: Color(0xFF1abc9c).withOpacity(0.9),
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-            margin: EdgeInsets.all(20),
-          ),
-        );
-
-        _nameController.clear();
-        _emailController.clear();
-        _messageController.clear();
-
-      } on MailerException catch (e) {
-        print('Message not sent.');
-        for (var p in e.problems) {
-          print('Problem: ${p.code}: ${p.msg}');
+    final url = Uri.parse('https://api.emailjs.com/api/v1.0/email/send');
+    final response = await http.post(
+      url,
+      headers: {
+        'origin': 'http://localhost',
+        'Content-Type': 'application/json',
+      },
+      body: json.encode({
+        'service_id': serviceId,
+        'template_id': templateId,
+        'user_id': userId,
+        'template_params': {
+          'from_name': name,
+          'from_email': email,
+          'message': message,
         }
+      }),
+    );
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text("Failed to send message."),
-            backgroundColor: Colors.red.shade400,
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-            margin: EdgeInsets.all(20),
+    if (response.statusCode == 200) {
+      print('Message sent!');
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Container(
+            padding: EdgeInsets.symmetric(vertical: 8),
+            child: Row(
+              children: [
+                Container(
+                  padding: EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(colors: [Color(0xFF1abc9c), Color(0xFF16a085)]),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Icon(Icons.check_circle, color: Colors.white, size: 20),
+                ),
+                SizedBox(width: 16),
+                Expanded(
+                  child: Text(
+                    "Message sent successfully!",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
-        );
-      }
+          backgroundColor: Color(0xFF1abc9c).withOpacity(0.9),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          margin: EdgeInsets.all(20),
+        ),
+      );
+
+      _nameController.clear();
+      _emailController.clear();
+      _messageController.clear();
+    }
+    else {
+      print('Failed to send message: ${response.body}');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Failed to send message."),
+          backgroundColor: Colors.red.shade400,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          margin: EdgeInsets.all(20),
+        ),
+      );
+
     }
   }
-
 
   ///---Footer---///
 
