@@ -43,7 +43,7 @@ Widget buildSkillCard(String title, List<String> skills) {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            const Color(0xFF1e002a).withOpacity(0.6),
+        const Color(0xFF1e002a).withOpacity(0.3),
             Colors.black.withOpacity(0.6),
           ],
         ),

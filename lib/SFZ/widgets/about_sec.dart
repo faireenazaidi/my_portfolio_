@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '3d_Container.dart';
 import 'Section_header.dart';
 
-Widget buildAboutSection({Key? key}) {
+Widget buildAboutSection() {
   return Container(
     padding: const EdgeInsets.all(24),
     constraints: const BoxConstraints(maxWidth: 1200),

@@ -43,16 +43,16 @@ class PortfolioHomeState extends State<PortfolioHome> with TickerProviderStateMi
       setState(() => _isScrolled = false);
     }
   }
-  // void scrollToSection(GlobalKey key) {
-  //   final context = key.currentContext;
-  //   if (context != null) {
-  //     Scrollable.ensureVisible(
-  //       context,
-  //       duration: const Duration(milliseconds: 800),
-  //       curve: Curves.easeInOut,
-  //     );
-  //   }
-  // }
+  void scrollToSection(GlobalKey key) {
+    final context = key.currentContext;
+    if (context != null) {
+      Scrollable.ensureVisible(
+        context,
+        duration: const Duration(milliseconds: 800),
+        curve: Curves.easeInOut,
+      );
+    }
+  }
   void _startTypingAnimation() {
     Timer.periodic(const Duration(milliseconds: 100), (timer) {
       if (_currentIndex <= _fullText.length) {
@@ -78,6 +78,14 @@ class PortfolioHomeState extends State<PortfolioHome> with TickerProviderStateMi
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      endDrawer: buildMobileDrawer(
+        context,
+        scrollToSection,
+        aboutSectionKey,
+        contactSectionKey,
+      ),
+
+
       body: Stack(
         children: [
           buildAnimatedBackground(context),
@@ -86,14 +94,20 @@ class PortfolioHomeState extends State<PortfolioHome> with TickerProviderStateMi
             child: Column(
               children: [
                 const SizedBox(height: 80),
-                buildHeroSection(context,typedText),
-                buildAboutSection(),
+                buildHeroSection(context,typedText,contactSectionKey, ),
+                Container(
+                  key: aboutSectionKey,
+                  child: buildAboutSection(),
+                ),
                 buildSkillsSection(context),
                 buildProjectsSection(context),
-                buildContactSection(
-                  nameController: nameController,
-                  emailController: emailController,
-                  messageController: messageController,
+                Container(
+                  key: contactSectionKey,
+                  child: buildContactSection(
+                    nameController: nameController,
+                    emailController: emailController,
+                    messageController: messageController,
+                  ),
                 ),
                 buildFooter(),
               ],

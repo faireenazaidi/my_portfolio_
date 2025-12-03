@@ -11,7 +11,7 @@ import 'contact.dart';
 
 
 
-Widget buildHeroSection( BuildContext context,String typedText) {
+Widget buildHeroSection( BuildContext context,String typedText,  GlobalKey contactSectionKey,) {
   return Container(
     padding: const EdgeInsets.all(24),
     constraints: const BoxConstraints(maxWidth: 1200),
@@ -104,6 +104,7 @@ Widget buildHeroSection( BuildContext context,String typedText) {
               label: '\$ Contact Me',
               isPrimary: false,
               onPressed: () {
+                scrollToSection(contactSectionKey);
                 print("Scrolling to contact section");
               },
             ),

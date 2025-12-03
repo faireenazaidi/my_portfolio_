@@ -16,7 +16,7 @@ Widget buildAnimatedBackground(BuildContext context) {
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
-                const Color(0xFF1e002a).withOpacity(0.5),
+                const Color(0xFF1e002a).withOpacity(0.4),
                 Colors.black,
                 Colors.black,
               ],
@@ -45,7 +45,7 @@ class GridPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = const Color(0xFF8b5cf6).withOpacity(0.05)
+      ..color = const Color(0xFF8b5cf6).withOpacity(0.4)
       ..strokeWidth = 1;
 
     const spacing = 50.0;
