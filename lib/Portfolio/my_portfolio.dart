@@ -15,15 +15,15 @@
 // import 'package:url_launcher/url_launcher.dart';
 //
 //
-// class PortfolioHome extends StatefulWidget {
+// class Portfolio extends StatefulWidget {
 //   final bool isDarkMode;
 //   final VoidCallback onThemeToggle;
-//   const PortfolioHome({super.key, required this.isDarkMode, required this.onThemeToggle});
+//   const Portfolio({super.key, required this.isDarkMode, required this.onThemeToggle});
 //   @override
-//   PortfolioHomeState createState() => PortfolioHomeState();
+//   PortfolioState createState() => PortfolioState();
 // }
 //
-// class PortfolioHomeState extends State<PortfolioHome> with TickerProviderStateMixin {
+// class PortfolioState extends State<Portfolio> with TickerProviderStateMixin {
 //   late ScrollController _scrollController;
 //   late AnimationController _heroController;
 //   late AnimationController _floatingController;

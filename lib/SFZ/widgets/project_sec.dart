@@ -30,7 +30,7 @@ Widget buildProjectsSection(BuildContext context) {
     constraints: const BoxConstraints(maxWidth: 1200),
     child: Column(
       children: [
-        buildSectionHeader('03.', 'Featured Projects'),
+        buildSectionHeader( context,'03.', 'Featured Projects'),
         const SizedBox(height: 48),
         Wrap(
           spacing: 24,

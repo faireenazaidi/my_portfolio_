@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import '3d_Container.dart';
 import 'Section_header.dart';
 
-Widget buildAboutSection() {
+Widget buildAboutSection(BuildContext context,) {
   return Container(
     padding: const EdgeInsets.all(24),
     constraints: const BoxConstraints(maxWidth: 1200),
     child: Column(
       children: [
-        buildSectionHeader('01.', 'About Me'),
-        const SizedBox(height: 48),
+        buildSectionHeader(context, '01.', 'About Me'),
+         SizedBox(height: 48),
         LayoutBuilder(
           builder: (context, constraints) {
             if (constraints.maxWidth > 768) {

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '3d_Container.dart';
 import 'Section_header.dart';
 
-Widget buildSkillsSection(BuildContext context) {
+Widget buildSkillsSection(BuildContext context,) {
   final skills = {
     'Mobile Development': ['Flutter', 'Dart', 'Cross-platform', 'Custom Widgets', 'Animations'],
     'Backend & APIs': ['RESTful APIs', 'Firebase', 'Authentication'],
@@ -16,7 +16,7 @@ Widget buildSkillsSection(BuildContext context) {
     constraints: const BoxConstraints(maxWidth: 1200),
     child: Column(
       children: [
-        buildSectionHeader('02.', 'Technical Skills'),
+        buildSectionHeader(context,'02.', 'Technical Skills'),
         const SizedBox(height: 48),
         Wrap(
           spacing: 24,

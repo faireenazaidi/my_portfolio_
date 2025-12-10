@@ -141,11 +141,14 @@ Drawer buildMobileDrawer(
     Function(GlobalKey) scrollToSection,
     GlobalKey aboutSectionKey,
     GlobalKey contactSectionKey,
+    GlobalKey skillsSectionKey,
+    GlobalKey homeSectionKey,
+    GlobalKey projectSectionKey,
     )
 
 {
   return Drawer(
-    width: 280,
+    width: 260,
     backgroundColor: Colors.transparent,
     elevation: 0,
     child: Container(
@@ -241,26 +244,11 @@ Drawer buildMobileDrawer(
 
             const SizedBox(height: 32),
 
-            // Navigation Items
-            InkWell(
-                child: _drawerItem(context, "01", "Home", Icons.home_outlined, 0),
-              onTap: (){
-
-              },
-            ),
-            InkWell(
-                child: _drawerItem(context, "02", "About", Icons.person_outline, 50),
-              onTap: () {
-                Navigator.pop(context);
-                Future.delayed(const Duration(milliseconds: 250), () {
-                  scrollToSection(aboutSectionKey);   // scroll after closing
-                });
-              },
-
-            ),
-            _drawerItem(context, "03", "Skills", Icons.code_outlined, 100),
-            _drawerItem(context, "04", "Projects", Icons.folder_outlined, 150),
-            _drawerItem(context, "05", "Contact", Icons.mail_outline, 200),
+             _drawerItem(context, "01", "Home", Icons.home_outlined, 0,() => scrollToSection(homeSectionKey),),
+            _drawerItem(context, "02", "About", Icons.person_outline, 50, () => scrollToSection(aboutSectionKey),),
+            _drawerItem(context, "03", "Skills", Icons.code_outlined, 100, () => scrollToSection(skillsSectionKey),),
+            _drawerItem(context, "04", "Projects", Icons.folder_outlined, 150, () => scrollToSection(projectSectionKey),),
+            _drawerItem(context, "05", "Contact", Icons.mail_outline, 200, () => scrollToSection(contactSectionKey),),
 
             const Spacer(),
 
@@ -302,7 +290,13 @@ Drawer buildMobileDrawer(
 }
 
 Widget _drawerItem(
-    BuildContext context, String number, String text, IconData icon, int delay) {
+    BuildContext context, String number,
+    String text,
+    IconData icon,
+    int delay,
+    VoidCallback? onTap,
+
+) {
   return TweenAnimationBuilder<double>(
     tween: Tween(begin: 0.0, end: 1.0),
     duration: Duration(milliseconds: 400 + delay),
@@ -322,6 +316,7 @@ Widget _drawerItem(
               child: InkWell(
                 onTap: () {
                   Navigator.pop(context);
+                  if (onTap != null) onTap();
                 },
                 borderRadius: BorderRadius.circular(12),
                 splashColor: const Color(0xFF8b5cf6).withOpacity(0.2),

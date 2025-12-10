@@ -20,6 +20,9 @@ class PortfolioHomeState extends State<PortfolioHome> with TickerProviderStateMi
   final ScrollController _scrollController = ScrollController();
   final GlobalKey contactSectionKey = GlobalKey();
   final GlobalKey aboutSectionKey = GlobalKey();
+  final GlobalKey homeSectionKey = GlobalKey();
+  final GlobalKey skillsSectionKey = GlobalKey();
+  final GlobalKey projectSectionKey = GlobalKey();
 
   bool _isScrolled = false;
   String typedText = '';
@@ -54,17 +57,30 @@ class PortfolioHomeState extends State<PortfolioHome> with TickerProviderStateMi
     }
   }
   void _startTypingAnimation() {
-    Timer.periodic(const Duration(milliseconds: 100), (timer) {
-      if (_currentIndex <= _fullText.length) {
+    const typingSpeed = Duration(milliseconds: 120);
+    const pauseDuration = Duration(seconds: 2);
+
+    Timer.periodic(typingSpeed, (timer) {
+      if (_currentIndex < _fullText.length) {
         setState(() {
-          typedText = _fullText.substring(0, _currentIndex);
+          typedText = _fullText.substring(0, _currentIndex + 1);
           _currentIndex++;
         });
       } else {
         timer.cancel();
+
+        Future.delayed(pauseDuration, () {
+          setState(() {
+            _currentIndex = 0;
+            typedText = "";
+          });
+          _startTypingAnimation();
+        });
       }
     });
   }
+
+
 
   @override
   void dispose() {
@@ -83,35 +99,87 @@ class PortfolioHomeState extends State<PortfolioHome> with TickerProviderStateMi
         scrollToSection,
         aboutSectionKey,
         contactSectionKey,
-      ),
+        skillsSectionKey,   // ← correct order
+        homeSectionKey,
+        projectSectionKey,
 
+      ),
 
       body: Stack(
         children: [
           buildAnimatedBackground(context),
           SingleChildScrollView(
             controller: _scrollController,
-            child: Column(
+            child:
+            // Column(
+            //   children: [
+            //     const SizedBox(height: 80),
+            //    buildHeroSection(context,typedText,contactSectionKey, ),
+            //     Container(
+            //       key: aboutSectionKey,
+            //       child: buildAboutSection(context),
+            //     ),
+            //     Container(
+            //         key: skillsSectionKey,
+            //         child: buildSkillsSection(context)
+            //     ),
+            //     buildProjectsSection(context),
+            //     Container(
+            //       key: contactSectionKey,
+            //       child: buildContactSection(
+            //          context,
+            //         nameController: nameController,
+            //         emailController: emailController,
+            //         messageController: messageController,
+            //       ),
+            //     ),
+            //     buildFooter(),
+            //   ],
+            // ),
+            Column(
               children: [
                 const SizedBox(height: 80),
-                buildHeroSection(context,typedText,contactSectionKey, ),
+
+                // HOME / HERO SECTION
+                Container(
+                  key: homeSectionKey,
+                  child: buildHeroSection(context, typedText, contactSectionKey),
+                ),
+
+                // ABOUT SECTION
                 Container(
                   key: aboutSectionKey,
-                  child: buildAboutSection(),
+                  child: buildAboutSection(context),
                 ),
-                buildSkillsSection(context),
-                buildProjectsSection(context),
+
+                // SKILLS SECTION
+                Container(
+                  key: skillsSectionKey,
+                  child: buildSkillsSection(context, ),
+                ),
+
+                // PROJECTS SECTION
+                Container(
+                  key: projectSectionKey,
+                  child: buildProjectsSection(context),
+                ),
+
+                // CONTACT SECTION
                 Container(
                   key: contactSectionKey,
                   child: buildContactSection(
+                    context,
                     nameController: nameController,
                     emailController: emailController,
                     messageController: messageController,
                   ),
                 ),
+
                 buildFooter(),
               ],
-            ),
+            )
+
+
           ),
 
           buildNavigationBar(context, _isScrolled),

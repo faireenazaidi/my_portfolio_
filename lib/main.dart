@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'Portfolio/my_portfolio.dart';
 import 'SFZ/Portfolio_home.dart';
 
 void main() {
@@ -19,7 +20,7 @@ class PortfolioApp extends StatelessWidget {
         scaffoldBackgroundColor: Colors.black,
         fontFamily: 'monospace',
       ),
-      home: const PortfolioHome(),
+      home: PortfolioHome()
     );
   }
 }

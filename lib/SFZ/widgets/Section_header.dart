@@ -1,21 +1,30 @@
 import 'package:flutter/material.dart';
 
+Widget buildSectionHeader(BuildContext context, String number, String title) {
+  double screenWidth = MediaQuery.of(context).size.width;
 
-Widget buildSectionHeader(String number, String title) {
+  // Smaller responsive sizes
+  double numberFontSize = screenWidth * 0.03;   // 3%
+  double titleFontSize  = screenWidth * 0.045;  // 4.5%
+
+  // Clamp smaller to avoid huge text
+  numberFontSize = numberFontSize.clamp(14.0, 30.0);
+  titleFontSize  = titleFontSize.clamp(18.0, 40.0);
+
   return Row(
     children: [
       Text(
         number,
-        style: const TextStyle(
-          color: Color(0xFF8b5cf6),
-          fontSize: 24,
+        style: TextStyle(
+          color: const Color(0xFF8b5cf6),
+          fontSize: numberFontSize,
         ),
       ),
       const SizedBox(width: 16),
       Text(
         title,
-        style: const TextStyle(
-          fontSize: 32,
+        style: TextStyle(
+          fontSize: titleFontSize,
           fontWeight: FontWeight.bold,
           color: Colors.white,
         ),
@@ -24,10 +33,10 @@ Widget buildSectionHeader(String number, String title) {
       Expanded(
         child: Container(
           height: 1,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             gradient: LinearGradient(
               colors: [
-                const Color(0xFF8b5cf6),
+                Color(0xFF8b5cf6),
                 Colors.transparent,
               ],
             ),

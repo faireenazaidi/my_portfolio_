@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:universal_html/html.dart' as html;
+import 'package:url_launcher/url_launcher.dart';
 import 'Section_header.dart';
 import 'blinking_cursor.dart';
 import 'contact.dart';
@@ -44,7 +45,6 @@ Widget buildHeroSection( BuildContext context,String typedText,  GlobalKey conta
           ),
         ),
         const SizedBox(height: 16),
-        // Typed Text
         Row(
           children: [
             const Text(
@@ -63,13 +63,12 @@ Widget buildHeroSection( BuildContext context,String typedText,  GlobalKey conta
           ],
         ),
         const SizedBox(height: 24),
-        // Description
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: const [
             Text(
               '// Results-driven developer specializing in',
-              style: TextStyle(color: Colors.grey, fontSize: 16),
+              style: TextStyle(color: Colors.grey, fontSize: 18),
             ),
             Text(
               '// cross-platform mobile development with',
@@ -121,22 +120,31 @@ Widget buildHeroSection( BuildContext context,String typedText,  GlobalKey conta
           ],
         ),
         const SizedBox(height: 32),
-        // Social Links
-        Row(
-          children: [
-            buildSocialButton(Icons.phone),
-            const SizedBox(width: 16),
-            buildSocialButton(Icons.work),
-            const SizedBox(width: 16),
-            buildSocialButton(Icons.code),
-          ],
-        ),
+    Row(
+      children: [
+        buildSocialButton(Icons.phone, "phone"),
+        const SizedBox(width: 16),
+        buildSocialButton(Icons.work, "work"),
+        const SizedBox(width: 16),
+        buildSocialButton(Icons.code, "code"),
       ],
+    )
+    ],
     ),
   );
 }
-Widget buildSocialButton(IconData icon) {
+
+Widget buildSocialButton(IconData icon,String type) {
   return HoverButton3D(
+      onTap: () {
+        if (type == "phone") {
+          launchUrl(Uri.parse("tel:+8173822136"));
+        } else if (type == "work") {
+          launchUrl(Uri.parse("https://www.linkedin.com/in/syed-faireena-zaidi"));
+        } else if (type == "code") {
+          launchUrl(Uri.parse("https://github.com/faireenazaidi"));
+        }
+    },
     child: Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
@@ -157,52 +165,51 @@ Widget buildButton3D({
   IconData? icon,
   required VoidCallback onPressed,
 }) {
-  return GestureDetector(
+  return HoverButton3D(
     onTap: onPressed,
-    child: HoverButton3D(
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-        decoration: BoxDecoration(
-          color: isPrimary ? const Color(0xFF8b5cf6) : Colors.transparent,
-          border: Border.all(
-            color: const Color(0xFF8b5cf6),
-            width: 2,
+    child: Container(
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+      decoration: BoxDecoration(
+        color: isPrimary ? const Color(0xFF8b5cf6) : Colors.transparent,
+        border: Border.all(
+          color: const Color(0xFF8b5cf6),
+          width: 2,
+        ),
+        borderRadius: BorderRadius.circular(8),
+        boxShadow: isPrimary
+            ? [
+          BoxShadow(
+            color: const Color(0xFF8b5cf6).withOpacity(0.5),
+            blurRadius: 20,
+            spreadRadius: 2,
           ),
-          borderRadius: BorderRadius.circular(8),
-          boxShadow: isPrimary
-              ? [
-            BoxShadow(
-              color: const Color(0xFF8b5cf6).withOpacity(0.5),
-              blurRadius: 20,
-              spreadRadius: 2,
-            ),
-          ]
-              : null,
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (icon != null) ...[
-              Icon(icon, size: 20),
-              const SizedBox(width: 8),
-            ],
-            Text(
-              label,
-              style: const TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
+        ]
+            : null,
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (icon != null) ...[
+            Icon(icon, size: 20),
+            const SizedBox(width: 8),
           ],
-        ),
+          Text(
+            label,
+            style: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ],
       ),
     ),
   );
 }
 class HoverButton3D extends StatefulWidget {
   final Widget child;
-
-  const HoverButton3D({Key? key, required this.child}) : super(key: key);
+  final VoidCallback onTap;
+  const HoverButton3D({Key? key, required this.child,required this.onTap,
+  }) : super(key: key);
 
   @override
   State<HoverButton3D> createState() => HoverButton3DState();
@@ -216,10 +223,13 @@ class HoverButton3DState extends State<HoverButton3D> {
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovering = true),
       onExit: (_) => setState(() => _isHovering = false),
-      child: AnimatedScale(
-        scale: _isHovering ? 1.05 : 1.0,
-        duration: const Duration(milliseconds: 200),
-        child: widget.child,
+      child: GestureDetector(
+        onTap: widget.onTap,
+        child: AnimatedScale(
+          scale: _isHovering ? 1.05 : 1.0,
+          duration: const Duration(milliseconds: 200),
+          child: widget.child,
+        ),
       ),
     );
   }
