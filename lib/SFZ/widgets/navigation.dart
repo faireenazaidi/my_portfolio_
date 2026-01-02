@@ -3,7 +3,12 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'hero_section.dart';
 
-Widget buildNavigationBar(BuildContext context, bool isScrolled) {
+Widget buildNavigationBar(BuildContext context, bool isScrolled,Function(GlobalKey) scrollToSection,
+    GlobalKey homeKey,
+    GlobalKey aboutKey,
+    GlobalKey skillsKey,
+    GlobalKey projectKey,
+    GlobalKey contactKey,) {
   final bool isDesktop = MediaQuery.of(context).size.width > 768;
 
   return Positioned(
@@ -43,13 +48,14 @@ Widget buildNavigationBar(BuildContext context, bool isScrolled) {
               if (isDesktop)
                 Row(
                   children: [
-                    _navItem('01.', 'Home'),
-                    _navItem('02.', 'About'),
-                    _navItem('03.', 'Skills'),
-                    _navItem('04.', 'Projects'),
-                    _navItem('05.', 'Contact'),
+                    _navItem('01.', 'Home', () => scrollToSection(homeKey)),
+                    _navItem('02.', 'About', () => scrollToSection(aboutKey)),
+                    _navItem('03.', 'Skills', () => scrollToSection(skillsKey)),
+                    _navItem('04.', 'Projects', () => scrollToSection(projectKey)),
+                    _navItem('05.', 'Contact', () => scrollToSection(contactKey)),
                   ],
                 ),
+
 
               // Mobile Drawer Icon with Animation
               if (!isDesktop)
@@ -387,11 +393,11 @@ Widget _socialIcon(IconData icon) {
   );
 }
 
-Widget _navItem(String number, String text) {
+Widget _navItem(String number, String text,VoidCallback  onTap) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 12),
     child: InkWell(
-      onTap: () {},
+      onTap: onTap,
       child: Row(
         children: [
           Text(

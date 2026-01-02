@@ -80,7 +80,7 @@ Widget buildHeroSection( BuildContext context,String typedText,  GlobalKey conta
                 style: TextStyle(color: Color(0xFF8b5cf6)),
                 children: [
                   TextSpan(
-                    text: '1 year',
+                    text: '1+ year',
                     style: TextStyle(color: Color(0xFF8b5cf6)),
                   ),
                   TextSpan(

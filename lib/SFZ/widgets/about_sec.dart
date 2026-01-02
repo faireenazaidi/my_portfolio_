@@ -46,7 +46,7 @@ Widget buildAboutSection(BuildContext context,) {
                 build3DCard(
                   icon: Icons.school,
                   title: 'Education',
-                  content: 'BCA — 82% (2024)\nIntermediate — 72% (2021)',
+                  content: 'BCA — 78% (2024)\nIntermediate — 72% (2021)',
                 ),
               ],
             );

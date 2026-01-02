@@ -99,7 +99,7 @@ class PortfolioHomeState extends State<PortfolioHome> with TickerProviderStateMi
         scrollToSection,
         aboutSectionKey,
         contactSectionKey,
-        skillsSectionKey,   // ← correct order
+        skillsSectionKey,
         homeSectionKey,
         projectSectionKey,
 
@@ -181,8 +181,19 @@ class PortfolioHomeState extends State<PortfolioHome> with TickerProviderStateMi
 
 
           ),
+          buildNavigationBar(
+            context,
+            _isScrolled,
+            scrollToSection,
+            homeSectionKey,
+            aboutSectionKey,
+            skillsSectionKey,
+            projectSectionKey,
+            contactSectionKey,
+          ),
 
-          buildNavigationBar(context, _isScrolled),
+
+       //   buildNavigationBar(context, _isScrolled),
         ],
       ),
     );
