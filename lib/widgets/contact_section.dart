@@ -1,0 +1,331 @@
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:url_launcher/url_launcher.dart';
+import '../theme/app_theme.dart';
+import 'common_widgets.dart';
+
+class ContactSection extends StatelessWidget {
+  final bool isDark;
+  const ContactSection({super.key, required this.isDark});
+
+  @override
+  Widget build(BuildContext context) {
+    final isWide = MediaQuery.of(context).size.width > 900;
+    return Container(
+
+      padding: const EdgeInsets.symmetric(vertical: 80, horizontal: 32),
+      decoration: BoxDecoration(
+        color: AppTheme.bg2(isDark),
+        border: Border(top: BorderSide(color: AppTheme.line(isDark))),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SectionHeader(
+            tag: 'Contact',
+            title: "Let's Build\nSomething",
+            subtitle:
+                'Open to opportunities at product companies, startups, and teams building apps people love.',
+            isDark: isDark,
+          ),
+          const SizedBox(height: 40),
+          isWide
+              ? Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(child: _buildInfo()),
+                    const SizedBox(width: 60),
+                    Expanded(child: _ContactForm(isDark: isDark)),
+                  ],
+                )
+              : Column(
+                  children: [
+                    _buildInfo(),
+                    const SizedBox(height: 40),
+                    _ContactForm(isDark: isDark),
+                  ],
+                ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildInfo() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _CItem(
+            icon: '✉️',
+            label: 'Email',
+            value: 'fairenazaidi@gmail.com',
+            isDark: isDark),
+        _CItem(
+            icon: '📱',
+            label: 'Mobile / WhatsApp',
+            value: '+91 8173822136',
+            isDark: isDark),
+        _CItem(
+            icon: '📍',
+            label: 'Location',
+            value: 'Noor Colony, Dubagga, Lucknow — 226003',
+            isDark: isDark),
+        const SizedBox(height: 24),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            _CSoc(
+                label: '✉️  Email',
+                isDark: isDark,
+                onTap: () => launchUrl(
+                    Uri.parse('mailto:fairenazaidi@gmail.com'))),
+            _CSoc(
+                label: 'LinkedIn',
+                isDark: isDark,
+                onTap: () =>
+                    launchUrl(Uri.parse('https://linkedin.com/in/'))),
+            _CSoc(
+                label: 'GitHub',
+                isDark: isDark,
+                onTap: () =>
+                    launchUrl(Uri.parse('https://github.com/'))),
+            _CSoc(
+                label: '💬  WhatsApp',
+                isDark: isDark,
+                onTap: () =>
+                    launchUrl(Uri.parse('https://wa.me/918173822136'))),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class _CItem extends StatelessWidget {
+  final String icon;
+  final String label;
+  final String value;
+  final bool isDark;
+
+  const _CItem({
+    required this.icon,
+    required this.label,
+    required this.value,
+    required this.isDark,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.only(bottom: 20),
+      margin: const EdgeInsets.only(bottom: 20),
+      decoration: BoxDecoration(
+        border: Border(bottom: BorderSide(color: AppTheme.line(isDark))),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: 44,
+            height: 44,
+            decoration: BoxDecoration(
+              color: AppTheme.orangeDim(isDark),
+              border: Border.all(color: AppTheme.orangeMid(isDark)),
+              borderRadius: BorderRadius.circular(4),
+            ),
+            child: Center(
+              child: Text(icon, style: const TextStyle(fontSize: 18)),
+            ),
+          ),
+          const SizedBox(width: 16),
+
+          // 🔥 FIX IS HERE
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  label.toUpperCase(),
+                  style: GoogleFonts.ibmPlexMono(
+                    fontSize: 10,
+                    letterSpacing: 1.5,
+                    color: AppTheme.ink3(isDark),
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  value,
+                  softWrap: true,
+                  style: GoogleFonts.epilogue(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: AppTheme.ink(isDark),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+class _CSoc extends StatefulWidget {
+  final String label;
+  final bool isDark;
+  final VoidCallback? onTap;
+  const _CSoc({required this.label, required this.isDark, this.onTap});
+
+  @override
+  State<_CSoc> createState() => _CSocState();
+}
+
+class _CSocState extends State<_CSoc> {
+  bool _hover = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      onEnter: (_) => setState(() => _hover = true),
+      onExit: (_) => setState(() => _hover = false),
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: widget.onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          transform: Matrix4.translationValues(0, _hover ? -2 : 0, 0),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          decoration: BoxDecoration(
+            color: AppTheme.cardBg(widget.isDark),
+            border: Border.all(
+              color: _hover
+                  ? AppTheme.acc(widget.isDark)
+                  : AppTheme.line(widget.isDark),
+              width: 1.5,
+            ),
+            borderRadius: BorderRadius.circular(4),
+          ),
+          child: Text(
+            widget.label,
+            style: GoogleFonts.epilogue(
+              fontSize: 13,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 1,
+              color: _hover
+                  ? AppTheme.acc(widget.isDark)
+                  : AppTheme.ink2(widget.isDark),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _ContactForm extends StatefulWidget {
+  final bool isDark;
+  const _ContactForm({required this.isDark});
+
+  @override
+  State<_ContactForm> createState() => _ContactFormState();
+}
+
+class _ContactFormState extends State<_ContactForm> {
+  final _name = TextEditingController();
+  final _email = TextEditingController();
+  final _msg = TextEditingController();
+
+  void _send() {
+    if (_name.text.trim().isEmpty ||
+        _email.text.trim().isEmpty ||
+        _msg.text.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Please fill in all fields.',
+              style: GoogleFonts.epilogue()),
+          backgroundColor: AppTheme.acc(widget.isDark),
+        ),
+      );
+      return;
+    }
+    launchUrl(Uri.parse(
+        'mailto:fairenazaidi@gmail.com?subject=Portfolio Enquiry from ${Uri.encodeComponent(_name.text)}&body=${Uri.encodeComponent(_msg.text + '\n\nFrom: ' + _email.text)}'));
+  }
+
+  InputDecoration _dec(String placeholder) => InputDecoration(
+        hintText: placeholder,
+        hintStyle: GoogleFonts.epilogue(
+            fontSize: 14, color: AppTheme.ink3(widget.isDark)),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        filled: true,
+        fillColor: AppTheme.bg(widget.isDark),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: AppTheme.line(widget.isDark), width: 1.5),
+          borderRadius: BorderRadius.circular(4),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide:
+              BorderSide(color: AppTheme.acc(widget.isDark), width: 1.5),
+          borderRadius: BorderRadius.circular(4),
+        ),
+      );
+
+  TextStyle get _inputStyle => GoogleFonts.epilogue(
+      fontSize: 14, color: AppTheme.ink(widget.isDark));
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(28),
+      decoration: BoxDecoration(
+        color: AppTheme.cardBg(widget.isDark),
+        border: Border.all(color: AppTheme.line(widget.isDark)),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _label('YOUR NAME'),
+          const SizedBox(height: 8),
+          TextField(
+              controller: _name,
+              style: _inputStyle,
+              decoration: _dec('Full name')),
+          const SizedBox(height: 16),
+          _label('EMAIL ADDRESS'),
+          const SizedBox(height: 8),
+          TextField(
+              controller: _email,
+              style: _inputStyle,
+              decoration: _dec('your@email.com')),
+          const SizedBox(height: 16),
+          _label('MESSAGE'),
+          const SizedBox(height: 8),
+          TextField(
+            controller: _msg,
+            style: _inputStyle,
+            decoration: _dec('Tell me about the role or project...'),
+            maxLines: 5,
+          ),
+          const SizedBox(height: 24),
+          OrangeButton(
+            label: 'SEND MESSAGE →',
+            onTap: _send,
+            isDark: widget.isDark,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _label(String text) {
+    return Text(
+      text,
+      style: GoogleFonts.ibmPlexMono(
+          fontSize: 10,
+          letterSpacing: 1.8,
+          color: AppTheme.ink3(widget.isDark)),
+    );
+  }
+}
