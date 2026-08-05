@@ -29,7 +29,7 @@ class _FaireenPortfolioAppState extends State<FaireenPortfolioApp> {
           colorScheme: const ColorScheme.light(
             primary: Color(0xFFE8470A),
           ),
-          pageTransitionsTheme: const PageTransitionsTheme(
+          pageTransitionsTheme:  PageTransitionsTheme(
             builders: {
               TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),
               TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
