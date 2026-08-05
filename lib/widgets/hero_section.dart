@@ -37,18 +37,23 @@ class _HeroSectionState extends State<HeroSection>
   void initState() {
     super.initState();
     _fadeIn = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 800));
+      vsync: this,
+      duration: const Duration(milliseconds: 900),
+    );
     _fadeAnim = CurvedAnimation(parent: _fadeIn, curve: Curves.easeOut);
     _slideAnim = Tween<Offset>(
-            begin: const Offset(0, 0.05), end: Offset.zero)
-        .animate(CurvedAnimation(parent: _fadeIn, curve: Curves.easeOut));
+      begin: const Offset(0, 0.05),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(parent: _fadeIn, curve: Curves.easeOut));
     _fadeIn.forward();
     _startTyping();
   }
 
   void _startTyping() {
     _timer = Timer.periodic(
-        Duration(milliseconds: _deleting ? 55 : 95), (_) => _tick());
+      Duration(milliseconds: _deleting ? 45 : 85),
+      (_) => _tick(),
+    );
   }
 
   void _tick() {
@@ -93,25 +98,26 @@ class _HeroSectionState extends State<HeroSection>
     final isWide = MediaQuery.of(context).size.width > 900;
     return Container(
       color: AppTheme.bg(widget.isDark),
-      constraints: const BoxConstraints(minHeight: 600),
+      constraints: const BoxConstraints(minHeight: 640),
       child: Stack(
         children: [
-          // Big watermark text
+          // Background watermark
           Positioned(
             bottom: -20,
             right: -10,
-            child: Text(
-              'FLUTTER',
-              style: GoogleFonts.bebasNeue(
-                fontSize: 180,
-                color: Colors.transparent,
-                height: 1,
-                shadows: [],
-              ).copyWith(
-                foreground: Paint()
-                  ..style = PaintingStyle.stroke
-                  ..strokeWidth = 1
-                  ..color = AppTheme.line(widget.isDark),
+            child: IgnorePointer(
+              child: Text(
+                'FLUTTER',
+                style: GoogleFonts.bebasNeue(
+                  fontSize: 210,
+                  color: Colors.transparent,
+                  height: 1,
+                ).copyWith(
+                  foreground: Paint()
+                    ..style = PaintingStyle.stroke
+                    ..strokeWidth = 1
+                    ..color = AppTheme.line(widget.isDark),
+                ),
               ),
             ),
           ),
@@ -127,23 +133,24 @@ class _HeroSectionState extends State<HeroSection>
             child: SlideTransition(
               position: _slideAnim,
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 32),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 32, vertical: 48),
                 child: isWide
                     ? Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Expanded(child: _buildLeft()),
                           const SizedBox(width: 48),
-                          _buildCard(),
-                          const SizedBox(width: 32),
+                          _buildIdeCard(),
+                          const SizedBox(width: 16),
                         ],
                       )
                     : Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           _buildLeft(),
-                          const SizedBox(height: 32),
-                          _buildCard(),
+                          const SizedBox(height: 40),
+                          _buildIdeCard(),
                         ],
                       ),
               ),
@@ -155,269 +162,261 @@ class _HeroSectionState extends State<HeroSection>
   }
 
   Widget _buildLeft() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 60),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Available tag
-          Container(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-            decoration: BoxDecoration(
-              color: AppTheme.orangeDim(widget.isDark),
-              border: Border.all(
-                  color: AppTheme.orangeMid(widget.isDark), width: 1),
-              borderRadius: BorderRadius.circular(3),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                BlinkingDot(color: AppTheme.acc(widget.isDark), size: 6),
-                const SizedBox(width: 8),
-                Text(
-                  'Available for opportunities',
-                  style: GoogleFonts.ibmPlexMono(
-                    fontSize: 11,
-                    color: AppTheme.acc(widget.isDark),
-                    letterSpacing: 0.5,
-                  ),
-                ),
-              ],
-            ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Available for opportunities tag
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+          decoration: BoxDecoration(
+            color: AppTheme.orangeDim(widget.isDark),
+            border: Border.all(
+                color: AppTheme.orangeMid(widget.isDark), width: 1),
+            borderRadius: BorderRadius.circular(4),
           ),
-          const SizedBox(height: 24),
-          // Big name
-          RichText(
-            text: TextSpan(
-              style: GoogleFonts.bebasNeue(
-                fontSize: 88,
-                letterSpacing: 2,
-                height: 0.92,
-                color: AppTheme.ink(widget.isDark),
-              ),
-              children: [
-                const TextSpan(text: 'Syed\n'),
-                TextSpan(
-                  text: 'Faireena\n',
-                  style: TextStyle(color: AppTheme.acc(widget.isDark)),
-                ),
-                const TextSpan(text: 'Zaidi'),
-              ],
-            ),
-          ),
-          const SizedBox(height: 24),
-          // Typing role
-          Row(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              Container(
-                  width: 32, height: 1.5, color: AppTheme.acc(widget.isDark)),
-              const SizedBox(width: 12),
-              _TypingText(typed: _typed, isDark: widget.isDark),
+              BlinkingDot(color: AppTheme.acc(widget.isDark), size: 6),
+              const SizedBox(width: 8),
+              Text(
+                'AVAILABLE FOR OPPORTUNITIES',
+                style: GoogleFonts.ibmPlexMono(
+                  fontSize: 11,
+                  color: AppTheme.acc(widget.isDark),
+                  letterSpacing: 1,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ],
           ),
-          const SizedBox(height: 24),
-          // Description
-          Text(
-            'Cross-platform mobile developer at ',
+        ),
+        const SizedBox(height: 24),
+
+        // Strong Hierarchy Header
+        Text(
+          'FLUTTER DEVELOPER',
+          style: GoogleFonts.ibmPlexMono(
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+            letterSpacing: 3,
+            color: AppTheme.acc(widget.isDark),
+          ),
+        ),
+        const SizedBox(height: 8),
+        RichText(
+          text: TextSpan(
+            style: GoogleFonts.bebasNeue(
+              fontSize: 76,
+              letterSpacing: 2,
+              height: 0.92,
+              color: AppTheme.ink(widget.isDark),
+            ),
+            children: [
+              const TextSpan(text: 'Syed '),
+              TextSpan(
+                text: 'Faireena\n',
+                style: TextStyle(color: AppTheme.acc(widget.isDark)),
+              ),
+              const TextSpan(text: 'Zaidi'),
+            ],
+          ),
+        ),
+        const SizedBox(height: 16),
+
+        // Tagline & Typing role
+        Row(
+          children: [
+            Container(
+                width: 32, height: 1.5, color: AppTheme.acc(widget.isDark)),
+            const SizedBox(width: 12),
+            _TypingText(typed: _typed, isDark: widget.isDark),
+          ],
+        ),
+        const SizedBox(height: 20),
+
+        // Description / Value Proposition
+        ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 580),
+          child: Text(
+            'Building production-ready cross-platform experiences for Android & iOS. Flutter Developer at Criterion Tech Pvt Ltd, specializing in pixel-perfect Figma UI translation, REST APIs, GetX architecture, and Firebase backend integration.',
             style: GoogleFonts.epilogue(
-                fontSize: 15,
-                color: AppTheme.ink2(widget.isDark),
-                fontWeight: FontWeight.w300,
-                height: 1.75),
-          ),
-          RichText(
-            text: TextSpan(
-              style: GoogleFonts.epilogue(
-                  fontSize: 15,
-                  color: AppTheme.ink2(widget.isDark),
-                  fontWeight: FontWeight.w300,
-                  height: 1.75),
-              children: [
-                TextSpan(
-                  text: 'Criterion Tech Pvt Ltd, Lucknow',
-                  style: GoogleFonts.epilogue(
-                      fontSize: 15,
-                      color: AppTheme.ink(widget.isDark),
-                      fontWeight: FontWeight.w600),
-                ),
-                const TextSpan(text: '.\nBuilding '),
-                TextSpan(
-                  text: 'production-ready Android & iOS apps',
-                  style: GoogleFonts.epilogue(
-                      fontSize: 15,
-                      color: AppTheme.ink(widget.isDark),
-                      fontWeight: FontWeight.w600),
-                ),
-                const TextSpan(
-                    text:
-                        ' with Flutter, Dart, GetX, REST APIs, and Firebase — one pixel-perfect widget at a time.'),
-              ],
+              fontSize: 15,
+              color: AppTheme.ink2(widget.isDark),
+              fontWeight: FontWeight.w300,
+              height: 1.7,
             ),
           ),
-          const SizedBox(height: 32),
-          // Buttons
-          Wrap(
-            spacing: 12,
-            runSpacing: 12,
-            children: [
-              OrangeButton(
-                label: 'VIEW PROJECTS →',
-                onTap: widget.onViewProjects,
-                isDark: widget.isDark,
+        ),
+        const SizedBox(height: 32),
+
+        // CTA Buttons
+        Wrap(
+          spacing: 12,
+          runSpacing: 12,
+          children: [
+            OrangeButton(
+              label: 'VIEW MY WORK ➔',
+              onTap: widget.onViewProjects,
+              isDark: widget.isDark,
+            ),
+            OutlineButton2(
+              label: '↓ DOWNLOAD RESUME',
+              isDark: widget.isDark,
+              onTap: () async {
+                final url = Uri.parse(
+                  'https://drive.google.com/file/d/1fhjghU9NKYepW0N6fObXyyXCgRkhwIsn/view?usp=drivesdk',
+                );
+                await launchUrl(url, mode: LaunchMode.platformDefault);
+              },
+            ),
+            OutlineButton2(
+              label: "LET'S TALK",
+              onTap: widget.onContact,
+              isDark: widget.isDark,
+            ),
+          ],
+        ),
+        const SizedBox(height: 32),
+
+        // Social Icons Row
+        Row(
+          children: [
+            Text(
+              'CONNECT: ',
+              style: GoogleFonts.ibmPlexMono(
+                fontSize: 11,
+                letterSpacing: 1.2,
+                color: AppTheme.ink3(widget.isDark),
               ),
-              OutlineButton2(
-                label: '↓ RESUME',
-                isDark: widget.isDark,
-                onTap: () async {
-                  final url = Uri.parse(
-                    'https://drive.google.com/file/d/1fhjghU9NKYepW0N6fObXyyXCgRkhwIsn/view?usp=drivesdk',
-                  );
-                  await launchUrl(url, mode: LaunchMode.platformDefault);
-                },
-              ),
-              OutlineButton2(
-                label: "LET'S TALK",
-                onTap: widget.onContact,
-                isDark: widget.isDark,
-              ),
-            ],
-          ),
-          const SizedBox(height: 32),
-          // Social icons
-          Row(
-            children: [
-              SocialBtn(
-                icon: const Icon(Icons.email_outlined),
-                tooltip: 'Email',
-                isDark: widget.isDark,
-                onTap: () =>
-                    launchUrl(Uri.parse('mailto:fairenazaidi@gmail.com')),
-              ),
-              const SizedBox(width: 10),
-              SocialBtn(
-                icon: const Icon(Icons.code),
-                tooltip: 'GitHub',
-                isDark: widget.isDark,
-                onTap: () => launchUrl(Uri.parse('https://github.com/')),
-              ),
-              const SizedBox(width: 10),
-              SocialBtn(
-                icon: const Icon(Icons.work_outline),
-                tooltip: 'LinkedIn',
-                isDark: widget.isDark,
-                onTap: () =>
-                    launchUrl(Uri.parse('https://linkedin.com/in/')),
-              ),
-              const SizedBox(width: 10),
-              SocialBtn(
-                icon: const Icon(Icons.chat_bubble_outline),
-                tooltip: 'WhatsApp',
-                isDark: widget.isDark,
-                onTap: () =>
-                    launchUrl(Uri.parse('https://wa.me/918173822136')),
-              ),
-            ],
-          ),
-        ],
-      ),
+            ),
+            const SizedBox(width: 8),
+            SocialBtn(
+              icon: const Icon(Icons.code),
+              tooltip: 'GitHub Profile',
+              isDark: widget.isDark,
+              onTap: () => launchUrl(Uri.parse('https://github.com/')),
+            ),
+            const SizedBox(width: 10),
+            SocialBtn(
+              icon: const Icon(Icons.work_outline),
+              tooltip: 'LinkedIn Profile',
+              isDark: widget.isDark,
+              onTap: () => launchUrl(Uri.parse('https://linkedin.com/in/')),
+            ),
+            const SizedBox(width: 10),
+            SocialBtn(
+              icon: const Icon(Icons.email_outlined),
+              tooltip: 'Send Email',
+              isDark: widget.isDark,
+              onTap: () => launchUrl(Uri.parse('mailto:fairenazaidi@gmail.com')),
+            ),
+            const SizedBox(width: 10),
+            SocialBtn(
+              icon: const Icon(Icons.chat_bubble_outline),
+              tooltip: 'WhatsApp Chat',
+              isDark: widget.isDark,
+              onTap: () => launchUrl(Uri.parse('https://wa.me/918173822136')),
+            ),
+          ],
+        ),
+      ],
     );
   }
 
-  Widget _buildCard() {
+  Widget _buildIdeCard() {
     return Container(
-      width: 320,
+      width: 360,
       decoration: BoxDecoration(
         color: AppTheme.cardBg(widget.isDark),
         border: Border.all(color: AppTheme.line(widget.isDark)),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.12),
+            blurRadius: 30,
+            offset: const Offset(0, 10),
+          ),
+        ],
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Card top (orange)
+          // IDE Window bar
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            decoration: BoxDecoration(
+              color: widget.isDark
+                  ? const Color(0xFF1E1B18)
+                  : const Color(0xFFE5E1D8),
+              borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(9)),
+            ),
+            child: Row(
+              children: [
+                _dot(const Color(0xFFFF5F56)),
+                const SizedBox(width: 6),
+                _dot(const Color(0xFFFFBD2E)),
+                const SizedBox(width: 6),
+                _dot(const Color(0xFF27C93F)),
+                const SizedBox(width: 14),
+                Text(
+                  'faireena_developer.dart',
+                  style: GoogleFonts.ibmPlexMono(
+                    fontSize: 11,
+                    color: AppTheme.ink3(widget.isDark),
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // Code Window Content
           Container(
             padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: AppTheme.acc(widget.isDark),
-              borderRadius:
-                  const BorderRadius.vertical(top: Radius.circular(8)),
-            ),
-             child:  Row(
-                children: [
-                  Container(
-                    width: 56,
-                    height: 56,
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.25),
-                      borderRadius: BorderRadius.circular(28),
-                    ),
-                    child: Center(
-                      child: Text(
-                        'FZ',
-                        style: GoogleFonts.bebasNeue(
-                          fontSize: 22,
-                          letterSpacing: 1.5,
-                          color: Colors.white,
-                        ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _codeLine('class ', 'FlutterDeveloper', ' {'),
+                _codeProp('  final String ', 'name', " = 'Syed Faireena Zaidi';"),
+                _codeProp('  final String ', 'company', " = 'Criterion Tech';"),
+                _codeProp('  final int ', 'appsShipped', " = 3; // Play Store"),
+                _codeProp('  final List<String> ', 'stack', " = ["),
+                _codeArrayItem("    'Flutter'", "    'Dart',"),
+                _codeArrayItem("    'GetX'", "    'Firebase',"),
+                _codeArrayItem("    'REST APIs'", "    'Material 3'"),
+                _codeProp('  ', '];', ''),
+                _codeLine('}', '', ''),
+                const SizedBox(height: 16),
+                Divider(color: AppTheme.line(widget.isDark), height: 1),
+                const SizedBox(height: 14),
+
+                // Card Footer Details
+                Row(
+                  children: [
+                    BlinkingDot(color: AppTheme.acc(widget.isDark), size: 8),
+                    const SizedBox(width: 8),
+                    Text(
+                      'STATUS: Active Developer',
+                      style: GoogleFonts.ibmPlexMono(
+                        fontSize: 11,
+                        fontWeight: FontWeight.bold,
+                        color: AppTheme.acc(widget.isDark),
                       ),
                     ),
+                  ],
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  'Lucknow, UP · Criterion Tech Pvt Ltd',
+                  style: GoogleFonts.epilogue(
+                    fontSize: 12,
+                    color: AppTheme.ink3(widget.isDark),
                   ),
-                  const SizedBox(width: 12),
-
-                  // 🔥 FIX HERE
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          'Faireena Zaidi',
-                          style: GoogleFonts.bebasNeue(
-                            fontSize: 18,
-                            letterSpacing: 1.2,
-                            color: Colors.white,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        Text(
-                          'Flutter Developer · Lucknow, UP',
-                          style: GoogleFonts.epilogue(
-                            fontSize: 12,
-                            color: Colors.white.withOpacity(0.75),
-                            fontWeight: FontWeight.w500,
-                          ),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              )
-          ),
-          // Card rows
-          _cardRow('STATUS', widget.isDark, isLive: true),
-          _cardRow('COMPANY', widget.isDark, value: 'Criterion Tech Pvt Ltd'),
-          _cardRow('ROLE', widget.isDark, value: 'Flutter Developer'),
-          _cardRow('SINCE', widget.isDark, value: 'Sep 2024'),
-          _cardRow('EDUCATION', widget.isDark, value: 'BCA · ERA University'),
-          _cardRow('EMAIL', widget.isDark,
-              value: 'fairenazaidi@gmail.com', small: true),
-          // Chips footer
-          Container(
-            padding: const EdgeInsets.all(14),
-            decoration: BoxDecoration(
-              border: Border(top: BorderSide(color: AppTheme.line(widget.isDark))),
-            ),
-            child: Wrap(
-              spacing: 6,
-              runSpacing: 6,
-              children: ['Flutter', 'Dart', 'GetX', 'Firebase', 'REST API']
-                  .map((t) => PortfolioChip(
-                      label: t, isDark: widget.isDark, filled: true))
-                  .toList(),
+                ),
+              ],
             ),
           ),
         ],
@@ -425,44 +424,69 @@ class _HeroSectionState extends State<HeroSection>
     );
   }
 
-  Widget _cardRow(String label, bool isDark,
-      {String? value, bool isLive = false, bool small = false}) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      decoration: BoxDecoration(
-        border: Border(bottom: BorderSide(color: AppTheme.line(isDark))),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  Widget _dot(Color c) => Container(
+        width: 10,
+        height: 10,
+        decoration: BoxDecoration(color: c, shape: BoxShape.circle),
+      );
+
+  Widget _codeLine(String keyword, String identifier, String rest) {
+    return RichText(
+      text: TextSpan(
+        style: GoogleFonts.ibmPlexMono(fontSize: 12),
         children: [
-          Text(
-            label,
-            style: GoogleFonts.ibmPlexMono(
-                fontSize: 11,
-                letterSpacing: 1,
-                color: AppTheme.ink3(isDark)),
+          TextSpan(
+            text: keyword,
+            style: TextStyle(
+                color: AppTheme.acc(widget.isDark),
+                fontWeight: FontWeight.bold),
           ),
-          if (isLive)
-            Row(
-              children: [
-                BlinkingDot(color: AppTheme.acc(isDark), size: 6),
-                const SizedBox(width: 6),
-                Text('Actively Working',
-                    style: GoogleFonts.epilogue(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600,
-                        color: AppTheme.acc(isDark))),
-              ],
-            )
-          else
-            Text(
-              value ?? '',
-              style: GoogleFonts.epilogue(
-                  fontSize: small ? 12 : 13,
-                  fontWeight: FontWeight.w600,
-                  color: AppTheme.ink(isDark)),
-            ),
+          TextSpan(
+            text: identifier,
+            style: TextStyle(
+                color: AppTheme.ink(widget.isDark),
+                fontWeight: FontWeight.bold),
+          ),
+          TextSpan(
+            text: rest,
+            style: TextStyle(color: AppTheme.ink3(widget.isDark)),
+          ),
         ],
+      ),
+    );
+  }
+
+  Widget _codeProp(String prefix, String prop, String val) {
+    return RichText(
+      text: TextSpan(
+        style: GoogleFonts.ibmPlexMono(fontSize: 11.5),
+        children: [
+          TextSpan(
+            text: prefix,
+            style: TextStyle(color: AppTheme.acc(widget.isDark)),
+          ),
+          TextSpan(
+            text: prop,
+            style: TextStyle(color: AppTheme.ink(widget.isDark)),
+          ),
+          TextSpan(
+            text: val,
+            style: TextStyle(color: AppTheme.ink3(widget.isDark)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _codeArrayItem(String left, String right) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 8),
+      child: Text(
+        '$left $right',
+        style: GoogleFonts.ibmPlexMono(
+          fontSize: 11,
+          color: widget.isDark ? const Color(0xFF9ECE6A) : const Color(0xFF2E7D32),
+        ),
       ),
     );
   }
@@ -508,7 +532,7 @@ class _TypingTextState extends State<_TypingText>
             fontSize: 13,
             color: AppTheme.acc(widget.isDark),
             letterSpacing: 1,
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.w600,
           ),
         ),
         const SizedBox(width: 2),
@@ -518,7 +542,7 @@ class _TypingTextState extends State<_TypingText>
             opacity: _blinkAnim.value,
             child: Container(
               width: 2,
-              height: 15,
+              height: 16,
               color: AppTheme.acc(widget.isDark),
             ),
           ),

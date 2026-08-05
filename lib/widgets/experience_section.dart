@@ -17,22 +17,25 @@ class _ExperienceSectionState extends State<ExperienceSection> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    final w = MediaQuery.of(context).size.width;
+    final isWide = w > 900;
+    final isDark = widget.isDark;
 
+    return Container(
       padding: const EdgeInsets.symmetric(vertical: 80, horizontal: 32),
       decoration: BoxDecoration(
-        color: AppTheme.bg(widget.isDark),
-        border: Border(top: BorderSide(color: AppTheme.line(widget.isDark))),
+        color: AppTheme.bg(isDark),
+        border: Border(top: BorderSide(color: AppTheme.line(isDark))),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SectionHeader(
-            tag: 'Experience',
-            title: 'Where I Work',
+            tag: 'Work Experience',
+            title: 'Professional Timeline',
             subtitle:
-                "One company so far — and I've made the most of every sprint, pull request, and deployment.",
-            isDark: widget.isDark,
+                'Hands-on cross-platform engineering, sprint contributions, and Google Play Store app delivery.',
+            isDark: isDark,
           ),
           const SizedBox(height: 40),
           MouseRegion(
@@ -41,20 +44,18 @@ class _ExperienceSectionState extends State<ExperienceSection> {
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 250),
               decoration: BoxDecoration(
-                color: AppTheme.cardBg(widget.isDark),
+                color: AppTheme.cardBg(isDark),
                 border: Border.all(
-                  color: _hover
-                      ? AppTheme.acc(widget.isDark)
-                      : AppTheme.line(widget.isDark),
+                  color: _hover ? AppTheme.acc(isDark) : AppTheme.line(isDark),
+                  width: 1.5,
                 ),
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(10),
                 boxShadow: _hover
                     ? [
                         BoxShadow(
-                          color:
-                              AppTheme.acc(widget.isDark).withOpacity(0.08),
+                          color: AppTheme.acc(isDark).withOpacity(0.1),
                           blurRadius: 40,
-                          offset: const Offset(0, 8),
+                          offset: const Offset(0, 10),
                         )
                       ]
                     : [],
@@ -62,156 +63,115 @@ class _ExperienceSectionState extends State<ExperienceSection> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Header
+                  // Company & Role Header
                   Container(
                     padding: const EdgeInsets.all(32),
                     decoration: BoxDecoration(
-                      border: Border(
-                          bottom: BorderSide(
-                              color: AppTheme.line(widget.isDark))),
+                      border: Border(bottom: BorderSide(color: AppTheme.line(isDark))),
                     ),
-                    child: Wrap(
-                      alignment: WrapAlignment.spaceBetween,
-                      crossAxisAlignment: WrapCrossAlignment.start,
-                      spacing: 12,
-                      runSpacing: 12,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            RichText(
-                              text: TextSpan(
-                                style: GoogleFonts.bebasNeue(
-                                  fontSize: 30,
-                                  letterSpacing: 1.500,
-                                  color: AppTheme.ink(widget.isDark),
-                                ),
-                                children: [
-                                  const TextSpan(text: 'Criterion '),
-                                  TextSpan(
-                                    text: 'Tech',
-                                    style: TextStyle(
-                                        color:
-                                            AppTheme.acc(widget.isDark)),
-                                  ),
-                                  const TextSpan(text: ' Pvt Ltd'),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 4),
-                              decoration: BoxDecoration(
-                                color: AppTheme.orangeDim(widget.isDark),
-                                border: Border.all(
-                                    color:
-                                        AppTheme.orangeMid(widget.isDark)),
-                                borderRadius: BorderRadius.circular(3),
-                              ),
-                              child: Text(
-                                'Flutter Developer',
-                                style: GoogleFonts.ibmPlexMono(
-                                    fontSize: 11,
-                                    letterSpacing: 0.8,
-                                    color: AppTheme.acc(widget.isDark),
-                                    fontWeight: FontWeight.w500),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 14, vertical: 7),
-                          decoration: BoxDecoration(
-                            color: Colors.green.withOpacity(0.1),
-                            border: Border.all(
-                                color: Colors.green.withOpacity(0.3)),
-                            borderRadius: BorderRadius.circular(3),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
+                    child: isWide
+                        ? Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              BlinkingDot(
-                                  color: Colors.green.shade500, size: 5),
-                              const SizedBox(width: 6),
-                              Text(
-                                'CURRENTLY WORKING',
-                                style: GoogleFonts.ibmPlexMono(
-                                    fontSize: 11,
-                                    letterSpacing: 1.2,
-                                    color: Colors.green.shade500,
-                                    fontWeight: FontWeight.w700),
-                              ),
+                              _buildCompanyTitle(isDark),
+                              _buildStatusBadge(),
+                            ],
+                          )
+                        : Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              _buildCompanyTitle(isDark),
+                              const SizedBox(height: 16),
+                              _buildStatusBadge(),
                             ],
                           ),
-                        ),
-                      ],
-                    ),
                   ),
-                  // Meta row
+
+                  // Meta Row
                   Container(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 32, vertical: 14),
-                    color: AppTheme.bg2(widget.isDark),
+                    color: AppTheme.bg2(isDark),
                     child: Wrap(
                       spacing: 24,
                       runSpacing: 8,
                       children: [
-                        _meta('📅 Sep 2024 – Present', widget.isDark),
-                        _meta(
-                            '📍 Lucknow, Uttar Pradesh', widget.isDark),
-                        _meta('💼 Full-time', widget.isDark),
+                        _meta('📅 Sep 2024 – Present (Active)', isDark),
+                        _meta('📍 Lucknow, Uttar Pradesh, India', isDark),
+                        _meta('💼 Full-time Flutter Developer', isDark),
                       ],
                     ),
                   ),
-                  // Body
+
+                  // Responsibilities & Impact
                   Padding(
                     padding: const EdgeInsets.all(32),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        ...kExpBullets.map((b) => Padding(
-                              padding: const EdgeInsets.only(bottom: 14),
-                              child: Row(
-                                crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 3, right: 14),
-                                    child: Text(
-                                      '→',
-                                      style: GoogleFonts.epilogue(
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.w700,
-                                          color: AppTheme.acc(
-                                              widget.isDark)),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Text(
-                                      b,
-                                      style: GoogleFonts.epilogue(
-                                          fontSize: 14,
-                                          color: AppTheme.ink2(
-                                              widget.isDark),
-                                          fontWeight: FontWeight.w300,
-                                          height: 1.65),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            )),
-                        Divider(
-                          color: AppTheme.line(widget.isDark),
-                          height: 40,
+                        Text(
+                          'KEY RESPONSIBILITIES & DEVELOPMENT IMPACT',
+                          style: GoogleFonts.ibmPlexMono(
+                            fontSize: 11,
+                            letterSpacing: 1.5,
+                            fontWeight: FontWeight.bold,
+                            color: AppTheme.acc(isDark),
+                          ),
                         ),
+                        const SizedBox(height: 20),
+                        ...kExpBullets.map(
+                          (b) => Padding(
+                            padding: const EdgeInsets.only(bottom: 14),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 4, right: 14),
+                                  child: Text(
+                                    '➔',
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.bold,
+                                      color: AppTheme.acc(isDark),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    b,
+                                    style: GoogleFonts.epilogue(
+                                      fontSize: 14,
+                                      color: AppTheme.ink2(isDark),
+                                      fontWeight: FontWeight.w300,
+                                      height: 1.65,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        Divider(color: AppTheme.line(isDark), height: 32),
+                        const SizedBox(height: 8),
+
+                        // Tech Stack Used
+                        Text(
+                          'TECHNOLOGIES USED IN PRODUCTION',
+                          style: GoogleFonts.ibmPlexMono(
+                            fontSize: 11,
+                            letterSpacing: 1.5,
+                            fontWeight: FontWeight.bold,
+                            color: AppTheme.acc(isDark),
+                          ),
+                        ),
+                        const SizedBox(height: 14),
                         Wrap(
                           spacing: 8,
                           runSpacing: 8,
                           children: kExpStack
-                              .map((s) => _stackPill(s, widget.isDark))
+                              .map((s) => _stackPill(s, isDark))
                               .toList(),
                         ),
                       ],
@@ -226,13 +186,84 @@ class _ExperienceSectionState extends State<ExperienceSection> {
     );
   }
 
+  Widget _buildCompanyTitle(bool isDark) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        RichText(
+          text: TextSpan(
+            style: GoogleFonts.bebasNeue(
+              fontSize: 34,
+              letterSpacing: 1.5,
+              color: AppTheme.ink(isDark),
+            ),
+            children: [
+              const TextSpan(text: 'Criterion '),
+              TextSpan(
+                text: 'Tech',
+                style: TextStyle(color: AppTheme.acc(isDark)),
+              ),
+              const TextSpan(text: ' Pvt Ltd'),
+            ],
+          ),
+        ),
+        const SizedBox(height: 6),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+          decoration: BoxDecoration(
+            color: AppTheme.orangeDim(isDark),
+            border: Border.all(color: AppTheme.orangeMid(isDark)),
+            borderRadius: BorderRadius.circular(4),
+          ),
+          child: Text(
+            'Flutter Developer · Mobile Engineering',
+            style: GoogleFonts.ibmPlexMono(
+              fontSize: 11,
+              letterSpacing: 0.8,
+              color: AppTheme.acc(isDark),
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildStatusBadge() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+      decoration: BoxDecoration(
+        color: Colors.green.withOpacity(0.12),
+        border: Border.all(color: Colors.green.withOpacity(0.35)),
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          BlinkingDot(color: Colors.green.shade500, size: 6),
+          const SizedBox(width: 8),
+          Text(
+            'CURRENTLY EMPLOYED',
+            style: GoogleFonts.ibmPlexMono(
+              fontSize: 11,
+              letterSpacing: 1.2,
+              color: Colors.green.shade500,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _meta(String text, bool isDark) {
     return Text(
       text,
       style: GoogleFonts.ibmPlexMono(
-          fontSize: 12,
-          letterSpacing: 0.5,
-          color: AppTheme.ink3(isDark)),
+        fontSize: 12,
+        letterSpacing: 0.5,
+        color: AppTheme.ink3(isDark),
+      ),
     );
   }
 
@@ -242,12 +273,15 @@ class _ExperienceSectionState extends State<ExperienceSection> {
       decoration: BoxDecoration(
         color: AppTheme.bg2(isDark),
         border: Border.all(color: AppTheme.line(isDark)),
-        borderRadius: BorderRadius.circular(3),
+        borderRadius: BorderRadius.circular(4),
       ),
       child: Text(
         text,
         style: GoogleFonts.ibmPlexMono(
-            fontSize: 11, color: AppTheme.ink2(isDark), letterSpacing: 0.5),
+          fontSize: 11,
+          color: AppTheme.ink2(isDark),
+          letterSpacing: 0.5,
+        ),
       ),
     );
   }

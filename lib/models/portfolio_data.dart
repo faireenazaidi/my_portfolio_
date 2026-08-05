@@ -2,8 +2,9 @@ import 'dart:ui';
 
 class SkillItem {
   final String name;
-  final int percent;
-  const SkillItem(this.name, this.percent);
+  final String level; // e.g. 'Core Focus', 'Advanced', 'Production'
+  final String? note;
+  const SkillItem(this.name, {this.level = 'Core Focus', this.note});
 }
 
 class SkillCategory {
@@ -43,9 +44,18 @@ class ProjectItem {
   final Color gradientEnd;
   final List<String> tags;
   final String title;
+  final String subtitle;
   final String desc;
+  final String problem;
+  final String myRole;
+  final List<String> contributionPoints;
   final List<String> features;
   final String playStoreUrl;
+  final String? githubUrl;
+  final String caseStudyOverview;
+  final List<String> architectureHighlights;
+  final List<String> previewImages;
+
   const ProjectItem({
     required this.num,
     required this.emoji,
@@ -53,9 +63,59 @@ class ProjectItem {
     required this.gradientEnd,
     required this.tags,
     required this.title,
+    this.subtitle = '',
     required this.desc,
+    this.problem = '',
+    this.myRole = 'Flutter Developer',
+    this.contributionPoints = const [],
     required this.features,
     required this.playStoreUrl,
+    this.githubUrl,
+    this.caseStudyOverview = '',
+    this.architectureHighlights = const [],
+    this.previewImages = const [],
+  });
+}
+
+class SpecializationItem {
+  final String id;
+  final String title;
+  final String description;
+  final String icon;
+  final List<String> highlights;
+
+  const SpecializationItem({
+    required this.id,
+    required this.title,
+    required this.description,
+    required this.icon,
+    required this.highlights,
+  });
+}
+
+class ArchitectureLayerItem {
+  final String layerName;
+  final String subtitle;
+  final String description;
+  final List<String> components;
+
+  const ArchitectureLayerItem({
+    required this.layerName,
+    required this.subtitle,
+    required this.description,
+    required this.components,
+  });
+}
+
+class EngineeringPrincipleItem {
+  final String title;
+  final String description;
+  final String icon;
+
+  const EngineeringPrincipleItem({
+    required this.title,
+    required this.description,
+    required this.icon,
   });
 }
 

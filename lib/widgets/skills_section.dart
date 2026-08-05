@@ -30,10 +30,10 @@ class _SkillsSectionState extends State<SkillsSection> {
       child: Column(
         children: [
           SectionHeader(
-            tag: 'Technical Skills',
-            title: 'The Stack',
+            tag: 'Technical Capabilities',
+            title: 'Skills & Tech Stack',
             subtitle:
-                'Every technology I use in production — nothing added just to look good on paper.',
+                'Technologies, frameworks, and workflow tools used in production applications — zero fluff or artificial percentages.',
             isDark: widget.isDark,
             alignment: CrossAxisAlignment.center,
           ),
@@ -42,7 +42,7 @@ class _SkillsSectionState extends State<SkillsSection> {
               ? Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(width: 260, child: _buildNav()),
+                    SizedBox(width: 280, child: _buildNav()),
                     const SizedBox(width: 48),
                     Expanded(child: _buildPanel(cat)),
                   ],
@@ -77,8 +77,8 @@ class _SkillsSectionState extends State<SkillsSection> {
 
   Widget _buildNavWrap() {
     return Wrap(
-      spacing: 6,
-      runSpacing: 6,
+      spacing: 8,
+      runSpacing: 8,
       children: kSkillCategories.asMap().entries.map((e) {
         final i = e.key;
         final cat = e.value;
@@ -130,6 +130,8 @@ class _SkillTabState extends State<_SkillTab> {
   @override
   Widget build(BuildContext context) {
     final active = widget.isActive || _hover;
+    final isDark = widget.isDark;
+
     return MouseRegion(
       onEnter: (_) => setState(() => _hover = true),
       onExit: (_) => setState(() => _hover = false),
@@ -141,23 +143,16 @@ class _SkillTabState extends State<_SkillTab> {
           width: widget.compact ? null : double.infinity,
           padding: widget.compact
               ? const EdgeInsets.symmetric(horizontal: 14, vertical: 8)
-              : const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-          margin: widget.compact
-              ? EdgeInsets.zero
-              : const EdgeInsets.only(bottom: 2),
+              : const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+          margin: widget.compact ? EdgeInsets.zero : const EdgeInsets.only(bottom: 4),
           decoration: BoxDecoration(
             color: active
-                ? AppTheme.orangeDim(widget.isDark)
-                : Colors.transparent,
-            border: Border(
-              left: BorderSide(
-                color: active
-                    ? AppTheme.acc(widget.isDark)
-                    : Colors.transparent,
-                width: 2,
-              ),
+                ? AppTheme.orangeDim(isDark)
+                : AppTheme.cardBg(isDark),
+            border: Border.all(
+              color: active ? AppTheme.acc(isDark) : AppTheme.line(isDark),
             ),
-            borderRadius: widget.compact ? BorderRadius.circular(4) : null,
+            borderRadius: BorderRadius.circular(6),
           ),
           child: Text(
             widget.label,
@@ -165,9 +160,7 @@ class _SkillTabState extends State<_SkillTab> {
               fontSize: widget.compact ? 12 : 14,
               fontWeight: FontWeight.w600,
               letterSpacing: 0.3,
-              color: active
-                  ? AppTheme.acc(widget.isDark)
-                  : AppTheme.ink3(widget.isDark),
+              color: active ? AppTheme.acc(isDark) : AppTheme.ink3(isDark),
             ),
           ),
         ),
@@ -176,82 +169,130 @@ class _SkillTabState extends State<_SkillTab> {
   }
 }
 
-class _SkillPanel extends StatefulWidget {
+class _SkillPanel extends StatelessWidget {
   final SkillCategory cat;
   final bool isDark;
 
   const _SkillPanel({super.key, required this.cat, required this.isDark});
 
   @override
-  State<_SkillPanel> createState() => _SkillPanelState();
-}
-
-class _SkillPanelState extends State<_SkillPanel> {
-  bool _animated = false;
-
-  @override
-  void initState() {
-    super.initState();
-    Future.delayed(const Duration(milliseconds: 100), () {
-      if (mounted) setState(() => _animated = true);
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          widget.cat.groupTitle.toUpperCase(),
-          style: GoogleFonts.ibmPlexMono(
-            fontSize: 11,
-            letterSpacing: 1.5,
-            color: AppTheme.ink3(widget.isDark),
-          ),
-        ),
-        Divider(color: AppTheme.line(widget.isDark), height: 24),
-        ...widget.cat.items.map((item) => Padding(
-              padding: const EdgeInsets.only(bottom: 16),
-              child: SkillBar(
-                name: item.name,
-                percent: item.percent,
-                isDark: widget.isDark,
-                animate: _animated,
-              ),
-            )),
-        const SizedBox(height: 8),
-        Divider(color: AppTheme.line(widget.isDark), height: 24),
-        Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children: widget.cat.tags
-              .map((t) => _SkillTag(label: t, isDark: widget.isDark))
-              .toList(),
-        ),
-      ],
-    );
-  }
-}
-
-class _SkillTag extends StatelessWidget {
-  final String label;
-  final bool isDark;
-  const _SkillTag({required this.label, required this.isDark});
-
-  @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      padding: const EdgeInsets.all(28),
       decoration: BoxDecoration(
         color: AppTheme.cardBg(isDark),
         border: Border.all(color: AppTheme.line(isDark)),
-        borderRadius: BorderRadius.circular(3),
+        borderRadius: BorderRadius.circular(8),
       ),
-      child: Text(
-        label,
-        style: GoogleFonts.ibmPlexMono(
-            fontSize: 11, color: AppTheme.ink2(isDark), letterSpacing: 0.5),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Text(cat.emoji, style: const TextStyle(fontSize: 24)),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  cat.groupTitle.toUpperCase(),
+                  style: GoogleFonts.bebasNeue(
+                    fontSize: 24,
+                    letterSpacing: 1.5,
+                    color: AppTheme.ink(isDark),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Divider(color: AppTheme.line(isDark), height: 28),
+
+          // Skill Cards Grid (No fake percentages)
+          ...cat.items.map(
+            (item) => Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: Container(
+                padding: const EdgeInsets.all(14),
+                decoration: BoxDecoration(
+                  color: AppTheme.bg(isDark),
+                  border: Border.all(color: AppTheme.line(isDark)),
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            item.name,
+                            style: GoogleFonts.epilogue(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: AppTheme.ink(isDark),
+                            ),
+                          ),
+                          if (item.note != null) ...[
+                            const SizedBox(height: 2),
+                            Text(
+                              item.note!,
+                              style: GoogleFonts.epilogue(
+                                fontSize: 12,
+                                color: AppTheme.ink3(isDark),
+                              ),
+                            ),
+                          ],
+                        ],
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: AppTheme.orangeDim(isDark),
+                        border: Border.all(color: AppTheme.orangeMid(isDark)),
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: Text(
+                        item.level,
+                        style: GoogleFonts.ibmPlexMono(
+                          fontSize: 11,
+                          fontWeight: FontWeight.bold,
+                          color: AppTheme.acc(isDark),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+
+          const SizedBox(height: 12),
+          Divider(color: AppTheme.line(isDark), height: 28),
+
+          // Skill Pills
+          Text(
+            'KEY CONCEPTS & LIBRARIES',
+            style: GoogleFonts.ibmPlexMono(
+              fontSize: 10,
+              letterSpacing: 1.5,
+              fontWeight: FontWeight.bold,
+              color: AppTheme.acc(isDark),
+            ),
+          ),
+          const SizedBox(height: 12),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: cat.tags
+                .map((t) => PortfolioChip(
+                      label: t,
+                      isDark: isDark,
+                      filled: true,
+                    ))
+                .toList(),
+          ),
+        ],
       ),
     );
   }

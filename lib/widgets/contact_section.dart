@@ -12,7 +12,6 @@ class ContactSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final isWide = MediaQuery.of(context).size.width > 900;
     return Container(
-
       padding: const EdgeInsets.symmetric(vertical: 80, horizontal: 32),
       decoration: BoxDecoration(
         color: AppTheme.bg2(isDark),
@@ -22,10 +21,10 @@ class ContactSection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SectionHeader(
-            tag: 'Contact',
-            title: "Let's Build\nSomething",
+            tag: 'Get In Touch',
+            title: "Have a Project in Mind?\nLet's Build Together.",
             subtitle:
-                'Open to opportunities at product companies, startups, and teams building apps people love.',
+                'Open for opportunities at product companies, startups, and engineering teams building applications people love.',
             isDark: isDark,
           ),
           const SizedBox(height: 40),
@@ -55,45 +54,51 @@ class ContactSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _CItem(
-            icon: '✉️',
-            label: 'Email',
-            value: 'fairenazaidi@gmail.com',
-            isDark: isDark),
+          icon: '✉️',
+          label: 'Email Address',
+          value: 'fairenazaidi@gmail.com',
+          isDark: isDark,
+        ),
         _CItem(
-            icon: '📱',
-            label: 'Mobile / WhatsApp',
-            value: '+91 8173822136',
-            isDark: isDark),
+          icon: '📱',
+          label: 'Phone / WhatsApp',
+          value: '+91 8173822136 / +91 8172800431',
+          isDark: isDark,
+        ),
         _CItem(
-            icon: '📍',
-            label: 'Location',
-            value: 'Noor Colony, Dubagga, Lucknow — 226003',
-            isDark: isDark),
+          icon: '📍',
+          label: 'Location',
+          value: 'Noor Colony, Dubagga, Lucknow — 226003, UP, India',
+          isDark: isDark,
+        ),
         const SizedBox(height: 24),
         Wrap(
           spacing: 8,
           runSpacing: 8,
           children: [
             _CSoc(
-                label: '✉️  Email',
-                isDark: isDark,
-                onTap: () => launchUrl(
-                    Uri.parse('mailto:fairenazaidi@gmail.com'))),
+              label: '✉️ Email Me',
+              isDark: isDark,
+              onTap: () =>
+                  launchUrl(Uri.parse('mailto:fairenazaidi@gmail.com')),
+            ),
             _CSoc(
-                label: 'LinkedIn',
-                isDark: isDark,
-                onTap: () =>
-                    launchUrl(Uri.parse('https://linkedin.com/in/'))),
+              label: 'LinkedIn Profile',
+              isDark: isDark,
+              onTap: () =>
+                  launchUrl(Uri.parse('https://linkedin.com/in/')),
+            ),
             _CSoc(
-                label: 'GitHub',
-                isDark: isDark,
-                onTap: () =>
-                    launchUrl(Uri.parse('https://github.com/'))),
+              label: 'GitHub Profile',
+              isDark: isDark,
+              onTap: () => launchUrl(Uri.parse('https://github.com/')),
+            ),
             _CSoc(
-                label: '💬  WhatsApp',
-                isDark: isDark,
-                onTap: () =>
-                    launchUrl(Uri.parse('https://wa.me/918173822136'))),
+              label: '💬 WhatsApp Chat',
+              isDark: isDark,
+              onTap: () =>
+                  launchUrl(Uri.parse('https://wa.me/918173822136')),
+            ),
           ],
         ),
       ],
@@ -131,15 +136,13 @@ class _CItem extends StatelessWidget {
             decoration: BoxDecoration(
               color: AppTheme.orangeDim(isDark),
               border: Border.all(color: AppTheme.orangeMid(isDark)),
-              borderRadius: BorderRadius.circular(4),
+              borderRadius: BorderRadius.circular(6),
             ),
             child: Center(
               child: Text(icon, style: const TextStyle(fontSize: 18)),
             ),
           ),
           const SizedBox(width: 16),
-
-          // 🔥 FIX IS HERE
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -150,6 +153,7 @@ class _CItem extends StatelessWidget {
                     fontSize: 10,
                     letterSpacing: 1.5,
                     color: AppTheme.ink3(isDark),
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
                 const SizedBox(height: 4),
@@ -170,6 +174,7 @@ class _CItem extends StatelessWidget {
     );
   }
 }
+
 class _CSoc extends StatefulWidget {
   final String label;
   final bool isDark;
@@ -241,15 +246,19 @@ class _ContactFormState extends State<_ContactForm> {
         _msg.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Please fill in all fields.',
-              style: GoogleFonts.epilogue()),
+          content: Text(
+            'Please fill in all fields.',
+            style: GoogleFonts.epilogue(),
+          ),
           backgroundColor: AppTheme.acc(widget.isDark),
         ),
       );
       return;
     }
+    final nameEncoded = Uri.encodeComponent(_name.text.trim());
+    final bodyEncoded = Uri.encodeComponent('${_msg.text.trim()}\n\nFrom: ${_email.text.trim()}');
     launchUrl(Uri.parse(
-        'mailto:fairenazaidi@gmail.com?subject=Portfolio Enquiry from ${Uri.encodeComponent(_name.text)}&body=${Uri.encodeComponent(_msg.text + '\n\nFrom: ' + _email.text)}'));
+        'mailto:fairenazaidi@gmail.com?subject=Portfolio Enquiry from $nameEncoded&body=$bodyEncoded'));
   }
 
   InputDecoration _dec(String placeholder) => InputDecoration(
@@ -291,26 +300,26 @@ class _ContactFormState extends State<_ContactForm> {
           TextField(
               controller: _name,
               style: _inputStyle,
-              decoration: _dec('Full name')),
+              decoration: _dec('Full Name / Company')),
           const SizedBox(height: 16),
           _label('EMAIL ADDRESS'),
           const SizedBox(height: 8),
           TextField(
               controller: _email,
               style: _inputStyle,
-              decoration: _dec('your@email.com')),
+              decoration: _dec('your.email@company.com')),
           const SizedBox(height: 16),
           _label('MESSAGE'),
           const SizedBox(height: 8),
           TextField(
             controller: _msg,
             style: _inputStyle,
-            decoration: _dec('Tell me about the role or project...'),
+            decoration: _dec('Tell me about the role, project, or application...'),
             maxLines: 5,
           ),
           const SizedBox(height: 24),
           OrangeButton(
-            label: 'SEND MESSAGE →',
+            label: 'SEND MESSAGE ➔',
             onTap: _send,
             isDark: widget.isDark,
           ),
@@ -323,9 +332,11 @@ class _ContactFormState extends State<_ContactForm> {
     return Text(
       text,
       style: GoogleFonts.ibmPlexMono(
-          fontSize: 10,
-          letterSpacing: 1.8,
-          color: AppTheme.ink3(widget.isDark)),
+        fontSize: 10,
+        letterSpacing: 1.8,
+        fontWeight: FontWeight.bold,
+        color: AppTheme.ink3(widget.isDark),
+      ),
     );
   }
 }

@@ -339,8 +339,9 @@ class _RevealOnScrollState extends State<RevealOnScroll>
     return NotificationListener<ScrollNotification>(
       child: LayoutBuilder(builder: (ctx, _) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (!mounted) return;
           final renderBox = ctx.findRenderObject() as RenderBox?;
-          if (renderBox != null && renderBox.hasSize) {
+          if (renderBox != null && renderBox.hasSize && renderBox.attached) {
             final pos = renderBox.localToGlobal(Offset.zero);
             final screenH = MediaQuery.of(context).size.height;
             if (pos.dy < screenH * 0.92) trigger();

@@ -23,7 +23,7 @@ class AboutSection extends StatelessWidget {
               children: [
                 Expanded(child: _buildLeft()),
                 const SizedBox(width: 60),
-                Expanded(child: _buildTimeline()),
+                Expanded(child: _buildRightTimeline()),
               ],
             )
           : Column(
@@ -31,7 +31,7 @@ class AboutSection extends StatelessWidget {
               children: [
                 _buildLeft(),
                 const SizedBox(height: 48),
-                _buildTimeline(),
+                _buildRightTimeline(),
               ],
             ),
     );
@@ -45,30 +45,60 @@ class AboutSection extends StatelessWidget {
           tag: 'About Me',
           title: 'More Than\nJust Code',
           subtitle:
-              "I build things people actually use — apps that are fast, maintainable, and look exactly the way designers intended.",
+              'Building production-ready Flutter mobile applications with clean architecture, responsive design, and attention to every UI detail.',
           isDark: isDark,
         ),
         const SizedBox(height: 28),
         _para(
-          "I'm ",
-          bold: "Faireena Zaidi",
+          "I am ",
+          bold: "Syed Faireena Zaidi",
           rest:
-              ", a Flutter developer at Criterion Tech Pvt Ltd, Lucknow — building cross-platform mobile applications for Android and iOS since September 2024.",
+              ", a Flutter Developer based in Lucknow, Uttar Pradesh. Since September 2024, I've been building and maintaining cross-platform mobile apps for Android and iOS at Criterion Tech Pvt Ltd.",
         ),
-        const SizedBox(height: 14),
+        const SizedBox(height: 16),
         _para(
-          'My approach is simple: ',
-          bold: 'clean architecture, readable code, and UI that respects the design',
+          'My core philosophy: ',
+          bold: 'Clean code, pixel-perfect UI fidelity, and smooth user experience',
           rest:
-              '. I translate Figma mockups into responsive widgets, integrate REST APIs cleanly using Dio/http, manage state with GetX, and wire Firebase services end-to-end.',
+              '. I bridge the gap between Figma designs and production apps — implementing GetX state management, Dio/http REST API integration, and Firebase cloud services.',
         ),
-        const SizedBox(height: 14),
+        const SizedBox(height: 16),
         _para(
-          'Before Criterion Tech, I graduated from ',
-          bold: 'ERA University, Lucknow',
+          'Educational background: ',
+          bold: 'Bachelor of Computer Applications (BCA, 79%)',
           rest:
-              ' with a BCA (79%) in 2024 — where I spent most of my time building Flutter projects and understanding what makes mobile software genuinely good.',
+              ' from ERA University, Lucknow (2022–2024), backed by strong foundations in computer science, object-oriented programming, and mathematical problem-solving.',
         ),
+        const SizedBox(height: 28),
+
+        // Key Value Pillars
+        Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: AppTheme.bg2(isDark),
+            border: Border.all(color: AppTheme.line(isDark)),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'WHAT DISTINGUISHES MY DEVELOPMENT WORK',
+                style: GoogleFonts.ibmPlexMono(
+                  fontSize: 10,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 1.5,
+                  color: AppTheme.acc(isDark),
+                ),
+              ),
+              const SizedBox(height: 12),
+              _pillar('⚡ Production Focus', '3 apps successfully published to Google Play Store.'),
+              _pillar('🎨 Figma to Flutter', 'Translating design mockups into exact responsive widgets.'),
+              _pillar('📐 Clean Architecture', 'GetX reactive state, dependency injection, and clean layers.'),
+            ],
+          ),
+        ),
+
         const SizedBox(height: 24),
         Wrap(
           spacing: 8,
@@ -81,23 +111,51 @@ class AboutSection extends StatelessWidget {
     );
   }
 
+  Widget _pillar(String title, String subtitle) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('• ', style: TextStyle(color: AppTheme.acc(isDark), fontWeight: FontWeight.bold)),
+          Expanded(
+            child: RichText(
+              text: TextSpan(
+                style: GoogleFonts.epilogue(fontSize: 13, color: AppTheme.ink2(isDark)),
+                children: [
+                  TextSpan(
+                    text: '$title — ',
+                    style: TextStyle(fontWeight: FontWeight.bold, color: AppTheme.ink(isDark)),
+                  ),
+                  TextSpan(text: subtitle),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _para(String before, {required String bold, required String rest}) {
     return RichText(
       text: TextSpan(
         style: GoogleFonts.epilogue(
-            fontSize: 15,
-            color: AppTheme.ink2(isDark),
-            fontWeight: FontWeight.w300,
-            height: 1.8),
+          fontSize: 15,
+          color: AppTheme.ink2(isDark),
+          fontWeight: FontWeight.w300,
+          height: 1.75,
+        ),
         children: [
           TextSpan(text: before),
           TextSpan(
             text: bold,
             style: GoogleFonts.epilogue(
-                fontSize: 15,
-                color: AppTheme.ink(isDark),
-                fontWeight: FontWeight.w600,
-                height: 1.8),
+              fontSize: 15,
+              color: AppTheme.ink(isDark),
+              fontWeight: FontWeight.w600,
+              height: 1.75,
+            ),
           ),
           TextSpan(text: rest),
         ],
@@ -105,21 +163,22 @@ class AboutSection extends StatelessWidget {
     );
   }
 
-  Widget _buildTimeline() {
+  Widget _buildRightTimeline() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           children: [
-            Container(
-                width: 24, height: 1.5, color: AppTheme.acc(isDark)),
+            Container(width: 24, height: 1.5, color: AppTheme.acc(isDark)),
             const SizedBox(width: 10),
             Text(
-              'JOURNEY',
+              'MY JOURNEY & GROWTH',
               style: GoogleFonts.ibmPlexMono(
-                  fontSize: 11,
-                  letterSpacing: 1.8,
-                  color: AppTheme.acc(isDark)),
+                fontSize: 11,
+                letterSpacing: 1.8,
+                color: AppTheme.acc(isDark),
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ],
         ),
@@ -154,7 +213,6 @@ class _TimelineItem extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Left: number + line
         SizedBox(
           width: 32,
           child: Column(
@@ -173,7 +231,7 @@ class _TimelineItem extends StatelessWidget {
                     style: GoogleFonts.ibmPlexMono(
                       fontSize: 10,
                       color: AppTheme.acc(isDark),
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
@@ -181,16 +239,13 @@ class _TimelineItem extends StatelessWidget {
               if (!isLast)
                 Container(
                   width: 1,
-                  height: 60, // 🔥 fixed height instead of Expanded
+                  height: 64,
                   color: AppTheme.line(isDark),
                 ),
             ],
           ),
         ),
-
         const SizedBox(width: 16),
-
-        // Right: content
         Expanded(
           child: Padding(
             padding: EdgeInsets.only(bottom: isLast ? 0 : 24),
@@ -203,13 +258,14 @@ class _TimelineItem extends StatelessWidget {
                     fontSize: 11,
                     letterSpacing: 1,
                     color: AppTheme.acc(isDark),
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   item.title,
                   style: GoogleFonts.epilogue(
-                    fontSize: 14,
+                    fontSize: 15,
                     fontWeight: FontWeight.w700,
                     color: AppTheme.ink(isDark),
                   ),

@@ -26,77 +26,106 @@ class PortfolioNav extends StatefulWidget implements PreferredSizeWidget {
 
 class _PortfolioNavState extends State<PortfolioNav> {
   final List<String> _links = [
-    'About', 'Skills', 'Experience', 'Projects', 'Education', 'Contact'
+    'About',
+    'Specialization',
+    'Skills',
+    'Experience',
+    'Projects',
+    'Architecture',
+    'Contact',
   ];
 
   @override
   Widget build(BuildContext context) {
-    final isWide = MediaQuery.of(context).size.width > 900;
+    final isWide = MediaQuery.of(context).size.width > 960;
+    final isDark = widget.isDark;
+
     return Container(
       decoration: BoxDecoration(
-        color: AppTheme.bg(widget.isDark),
+        color: AppTheme.bg(isDark),
         border: Border(
-          bottom: BorderSide(color: AppTheme.line(widget.isDark)),
+          bottom: BorderSide(color: AppTheme.line(isDark)),
         ),
       ),
       child: Stack(
         children: [
-          // Scroll progress bar
+          // Scroll Progress Bar
           Positioned(
             bottom: 0,
             left: 0,
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 50),
               width: MediaQuery.of(context).size.width * widget.scrollProgress,
-              height: 2,
-              color: AppTheme.acc(widget.isDark),
+              height: 2.5,
+              color: AppTheme.acc(isDark),
             ),
           ),
           SafeArea(
             child: SizedBox(
               height: 60,
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 32),
+                padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: Row(
                   children: [
-                    // Logo
-                    RichText(
-                      text: TextSpan(
-                        style: GoogleFonts.bebasNeue(
-                          fontSize: 22,
-                          letterSpacing: 1.5,
-                          color: AppTheme.ink(widget.isDark),
-                        ),
-                        children: [
-                          const TextSpan(text: 'FZ'),
-                          TextSpan(
-                            text: '.',
-                            style: TextStyle(color: AppTheme.acc(widget.isDark)),
+                    // Brand Logo
+                    MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: GestureDetector(
+                        onTap: () => widget.onNav('hero'),
+                        child: RichText(
+                          text: TextSpan(
+                            style: GoogleFonts.bebasNeue(
+                              fontSize: 24,
+                              letterSpacing: 1.5,
+                              color: AppTheme.ink(isDark),
+                            ),
+                            children: [
+                              const TextSpan(text: 'FAIREENA'),
+                              TextSpan(
+                                text: '.',
+                                style: TextStyle(color: AppTheme.acc(isDark)),
+                              ),
+                              TextSpan(
+                                text: 'DEV',
+                                style: TextStyle(
+                                  color: AppTheme.acc(isDark),
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
+                        ),
                       ),
                     ),
                     const Spacer(),
+
+                    // Desktop Navigation Links
                     if (isWide) ...[
-                      ..._links.map((l) => _NavLink(
-                            label: l,
-                            isDark: widget.isDark,
-                            onTap: () => widget.onNav(l.toLowerCase()),
-                          )),
-                      const SizedBox(width: 24),
+                      ..._links.map(
+                        (l) => _NavLink(
+                          label: l,
+                          isDark: isDark,
+                          onTap: () => widget.onNav(l.toLowerCase()),
+                        ),
+                      ),
+                      const SizedBox(width: 16),
                     ],
-                    // Dark/Light toggle
+
+                    // Theme Mode Toggle Button
                     _ModeBtn(
-                      isDark: widget.isDark,
+                      isDark: isDark,
                       onTap: widget.onToggleTheme,
                     ),
-                    const SizedBox(width: 10),
-                    // Hire button
-                    _HireBtn(isDark: widget.isDark),
+                    const SizedBox(width: 8),
+
+                    // Resume CTA Button in Nav
+                    _ResumeNavBtn(isDark: isDark),
+
+                    // Mobile Drawer Hamburger
                     if (!isWide) ...[
-                      const SizedBox(width: 10),
+                      const SizedBox(width: 8),
                       _HamburgerBtn(
-                        isDark: widget.isDark,
+                        isDark: isDark,
                         links: _links,
                         onNav: widget.onNav,
                       ),
@@ -116,8 +145,11 @@ class _NavLink extends StatefulWidget {
   final String label;
   final bool isDark;
   final VoidCallback onTap;
-  const _NavLink(
-      {required this.label, required this.isDark, required this.onTap});
+  const _NavLink({
+    required this.label,
+    required this.isDark,
+    required this.onTap,
+  });
 
   @override
   State<_NavLink> createState() => _NavLinkState();
@@ -135,7 +167,7 @@ class _NavLinkState extends State<_NavLink> {
       child: GestureDetector(
         onTap: widget.onTap,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -144,7 +176,7 @@ class _NavLinkState extends State<_NavLink> {
                 style: GoogleFonts.epilogue(
                   fontSize: 11,
                   fontWeight: FontWeight.w600,
-                  letterSpacing: 1.5,
+                  letterSpacing: 1.2,
                   color: _hover
                       ? AppTheme.ink(widget.isDark)
                       : AppTheme.ink3(widget.isDark),
@@ -152,8 +184,8 @@ class _NavLinkState extends State<_NavLink> {
               ),
               const SizedBox(height: 2),
               AnimatedContainer(
-                duration: const Duration(milliseconds: 250),
-                width: _hover ? 24 : 0,
+                duration: const Duration(milliseconds: 200),
+                width: _hover ? 20 : 0,
                 height: 1.5,
                 color: AppTheme.acc(widget.isDark),
               ),
@@ -187,26 +219,36 @@ class _ModeBtnState extends State<_ModeBtn> {
         onTap: widget.onTap,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
           decoration: BoxDecoration(
             border: Border.all(
               color: _hover
                   ? AppTheme.acc(widget.isDark)
                   : AppTheme.lineStrong(widget.isDark),
-              width: 1.5,
+              width: 1.2,
             ),
             borderRadius: BorderRadius.circular(4),
           ),
-          child: Text(
-            widget.isDark ? 'LIGHT' : 'DARK',
-            style: GoogleFonts.epilogue(
-              fontSize: 11,
-              fontWeight: FontWeight.w700,
-              letterSpacing: 1.2,
-              color: _hover
-                  ? AppTheme.acc(widget.isDark)
-                  : AppTheme.ink3(widget.isDark),
-            ),
+          child: Row(
+            children: [
+              Icon(
+                widget.isDark ? Icons.light_mode_outlined : Icons.dark_mode_outlined,
+                size: 14,
+                color: AppTheme.acc(widget.isDark),
+              ),
+              const SizedBox(width: 4),
+              Text(
+                widget.isDark ? 'LIGHT' : 'DARK',
+                style: GoogleFonts.epilogue(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 1.2,
+                  color: _hover
+                      ? AppTheme.acc(widget.isDark)
+                      : AppTheme.ink3(widget.isDark),
+                ),
+              ),
+            ],
           ),
         ),
       ),
@@ -214,15 +256,15 @@ class _ModeBtnState extends State<_ModeBtn> {
   }
 }
 
-class _HireBtn extends StatefulWidget {
+class _ResumeNavBtn extends StatefulWidget {
   final bool isDark;
-  const _HireBtn({required this.isDark});
+  const _ResumeNavBtn({required this.isDark});
 
   @override
-  State<_HireBtn> createState() => _HireBtnState();
+  State<_ResumeNavBtn> createState() => _ResumeNavBtnState();
 }
 
-class _HireBtnState extends State<_HireBtn> {
+class _ResumeNavBtnState extends State<_ResumeNavBtn> {
   bool _hover = false;
 
   @override
@@ -236,34 +278,29 @@ class _HireBtnState extends State<_HireBtn> {
           final url = Uri.parse(
             'https://drive.google.com/file/d/1fhjghU9NKYepW0N6fObXyyXCgRkhwIsn/view?usp=drivesdk',
           );
-          if (await canLaunchUrl(url)) {
-            await launchUrl(url, mode: LaunchMode.platformDefault);
-          } else {
-            // fallback — force open without checking
-            await launchUrl(url, mode: LaunchMode.platformDefault);
-          }
+          await launchUrl(url, mode: LaunchMode.platformDefault);
         },
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
           transform: Matrix4.translationValues(0, _hover ? -1 : 0, 0),
-          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 9),
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
           decoration: BoxDecoration(
             color: AppTheme.acc(widget.isDark),
             borderRadius: BorderRadius.circular(4),
             boxShadow: _hover
                 ? [
                     BoxShadow(
-                      color: AppTheme.acc(widget.isDark).withOpacity(0.35),
-                      blurRadius: 20,
-                      offset: const Offset(0, 6),
+                      color: AppTheme.acc(widget.isDark).withOpacity(0.3),
+                      blurRadius: 16,
+                      offset: const Offset(0, 4),
                     )
                   ]
                 : [],
           ),
           child: Text(
-            'VIEW CV',
+            'RESUME',
             style: GoogleFonts.epilogue(
-              fontSize: 11,
+              fontSize: 10,
               fontWeight: FontWeight.w700,
               letterSpacing: 1.2,
               color: Colors.white,
@@ -279,8 +316,11 @@ class _HamburgerBtn extends StatefulWidget {
   final bool isDark;
   final List<String> links;
   final Function(String) onNav;
-  const _HamburgerBtn(
-      {required this.isDark, required this.links, required this.onNav});
+  const _HamburgerBtn({
+    required this.isDark,
+    required this.links,
+    required this.onNav,
+  });
 
   @override
   State<_HamburgerBtn> createState() => _HamburgerBtnState();
@@ -291,26 +331,32 @@ class _HamburgerBtnState extends State<_HamburgerBtn> {
     showModalBottomSheet(
       context: context,
       backgroundColor: AppTheme.bg(widget.isDark),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
       builder: (ctx) => Padding(
-        padding: const EdgeInsets.all(32),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: widget.links
-              .map((l) => ListTile(
-                    title: Text(
-                      l.toUpperCase(),
-                      style: GoogleFonts.bebasNeue(
-                        fontSize: 28,
-                        letterSpacing: 1.5,
-                        color: AppTheme.ink(widget.isDark),
-                      ),
+              .map(
+                (l) => ListTile(
+                  title: Text(
+                    l.toUpperCase(),
+                    style: GoogleFonts.bebasNeue(
+                      fontSize: 26,
+                      letterSpacing: 1.5,
+                      color: AppTheme.ink(widget.isDark),
                     ),
-                    onTap: () {
-                      Navigator.pop(ctx);
-                      widget.onNav(l.toLowerCase());
-                    },
-                  ))
+                  ),
+                  trailing: const Icon(Icons.arrow_forward_ios, size: 14),
+                  onTap: () {
+                    Navigator.pop(ctx);
+                    widget.onNav(l.toLowerCase());
+                  },
+                ),
+              )
               .toList(),
         ),
       ),
@@ -325,11 +371,12 @@ class _HamburgerBtnState extends State<_HamburgerBtn> {
         padding: const EdgeInsets.all(6),
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          spacing: 5,
           children: [
-            Container(width: 22, height: 1.5, color: AppTheme.ink(widget.isDark)),
-            Container(width: 22, height: 1.5, color: AppTheme.ink(widget.isDark)),
-            Container(width: 22, height: 1.5, color: AppTheme.ink(widget.isDark)),
+            Container(width: 20, height: 2, color: AppTheme.ink(widget.isDark)),
+            const SizedBox(height: 4),
+            Container(width: 20, height: 2, color: AppTheme.ink(widget.isDark)),
+            const SizedBox(height: 4),
+            Container(width: 20, height: 2, color: AppTheme.ink(widget.isDark)),
           ],
         ),
       ),

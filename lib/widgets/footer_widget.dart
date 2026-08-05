@@ -7,29 +7,31 @@ class PortfolioFooter extends StatelessWidget {
   final bool isDark;
   final Function(String) onNav;
 
-  const PortfolioFooter(
-      {super.key, required this.isDark, required this.onNav});
+  const PortfolioFooter({
+    super.key,
+    required this.isDark,
+    required this.onNav,
+  });
 
   @override
   Widget build(BuildContext context) {
     final bgColor = isDark ? AppTheme.bg3Dark : AppTheme.inkLight;
-    final textColor =
-        isDark ? AppTheme.inkDark : const Color(0xFFF5F2EC);
+    final textColor = isDark ? AppTheme.inkDark : const Color(0xFFF5F2EC);
     final subColor = isDark
         ? AppTheme.ink3Dark
-        : const Color(0xFFF5F2EC).withOpacity(0.45);
+        : const Color(0xFFF5F2EC).withOpacity(0.5);
     final headColor = isDark
         ? AppTheme.ink3Dark
         : const Color(0xFFF5F2EC).withOpacity(0.35);
     final linkColor = isDark
         ? AppTheme.ink3Dark
-        : const Color(0xFFF5F2EC).withOpacity(0.5);
+        : const Color(0xFFF5F2EC).withOpacity(0.6);
 
-    final isWide = MediaQuery.of(context).size.width > 700;
+    final isWide = MediaQuery.of(context).size.width > 750;
 
     return Container(
       color: bgColor,
-      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 40),
+      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 48),
       child: Column(
         children: [
           isWide
@@ -39,19 +41,34 @@ class PortfolioFooter extends StatelessWidget {
                     Expanded(flex: 2, child: _buildBrand(textColor, subColor)),
                     const SizedBox(width: 40),
                     Expanded(
-                        child: _buildLinks('Navigate', headColor, linkColor, [
-                      'About',
-                      'Skills',
-                      'Experience',
-                      'Projects',
-                      'Education',
-                      'Contact'
-                    ], onNav)),
+                      child: _buildLinks(
+                        'Navigate',
+                        headColor,
+                        linkColor,
+                        [
+                          'About',
+                          'Specialization',
+                          'Skills',
+                          'Experience',
+                          'Projects',
+                          'Architecture',
+                          'Contact'
+                        ],
+                        onNav,
+                      ),
+                    ),
                     const SizedBox(width: 40),
                     Expanded(
-                        child:
-                            _buildLinks('Connect', headColor, linkColor, [], null,
-                                socials: true, isDark: isDark)),
+                      child: _buildLinks(
+                        'Connect',
+                        headColor,
+                        linkColor,
+                        [],
+                        null,
+                        socials: true,
+                        isDark: isDark,
+                      ),
+                    ),
                   ],
                 )
               : Column(
@@ -59,97 +76,72 @@ class PortfolioFooter extends StatelessWidget {
                   children: [
                     _buildBrand(textColor, subColor),
                     const SizedBox(height: 32),
-                    _buildLinks('Navigate', headColor, linkColor, [
-                      'About', 'Skills', 'Experience',
-                      'Projects', 'Education', 'Contact'
-                    ], onNav),
+                    _buildLinks(
+                      'Navigate',
+                      headColor,
+                      linkColor,
+                      [
+                        'About',
+                        'Specialization',
+                        'Skills',
+                        'Experience',
+                        'Projects',
+                        'Architecture',
+                        'Contact'
+                      ],
+                      onNav,
+                    ),
                   ],
                 ),
-          const SizedBox(height: 32),
+          const SizedBox(height: 36),
           Divider(
             color: isDark
                 ? AppTheme.line(isDark)
-                : Colors.white.withOpacity(0.08),
+                : Colors.white.withOpacity(0.1),
             height: 1,
           ),
-          const SizedBox(height: 20),
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //   children: [
-          //     Flexible(
-          //       child: Text(
-          //         '© 2025 Syed Faireena Abbas Zaidi. All rights reserved.',
-          //         style: GoogleFonts.epilogue(
-          //           fontSize: 12,
-          //           color: isDark
-          //               ? AppTheme.ink3Dark
-          //               : const Color(0xFFF5F2EC).withOpacity(0.3),
-          //         ),
-          //       ),
-          //     ),
-          //     const SizedBox(width: 12),
-          //     Flexible(
-          //       child: Text(
-          //         'Flutter Developer · Lucknow, India',
-          //         textAlign: TextAlign.right,
-          //         style: GoogleFonts.ibmPlexMono(
-          //           fontSize: 11,
-          //           color: isDark
-          //               ? AppTheme.ink3Dark
-          //               : const Color(0xFFF5F2EC).withOpacity(0.3),
-          //         ),
-          //       ),
-          //     ),
-          //   ],
-          // ),
+          const SizedBox(height: 24),
           isWide
               ? Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                '© 2025 Syed Faireena Abbas Zaidi. All rights reserved.',
-                style: GoogleFonts.epilogue(
-                  fontSize: 12,
-                  color: isDark
-                      ? AppTheme.ink3Dark
-                      : const Color(0xFFF5F2EC).withOpacity(0.3),
-                ),),
-              Text(
-                'Flutter Developer · Lucknow, India',
-                textAlign: TextAlign.right,
-                style: GoogleFonts.ibmPlexMono(
-                  fontSize: 11,
-                  color: isDark
-                      ? AppTheme.ink3Dark
-                      : const Color(0xFFF5F2EC).withOpacity(0.3),
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      '© 2025 Syed Faireena Abbas Zaidi. All rights reserved.',
+                      style: GoogleFonts.epilogue(
+                        fontSize: 12,
+                        color: subColor,
+                      ),
+                    ),
+                    Text(
+                      'Flutter Developer · Criterion Tech · Lucknow, India',
+                      textAlign: TextAlign.right,
+                      style: GoogleFonts.ibmPlexMono(
+                        fontSize: 11,
+                        color: subColor,
+                      ),
+                    ),
+                  ],
+                )
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '© 2025 Syed Faireena Abbas Zaidi. All rights reserved.',
+                      style: GoogleFonts.epilogue(
+                        fontSize: 12,
+                        color: subColor,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      'Flutter Developer · Criterion Tech · Lucknow, India',
+                      style: GoogleFonts.ibmPlexMono(
+                        fontSize: 11,
+                        color: subColor,
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-            ],
-          ) : Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                '© 2025 Syed Faireena Abbas Zaidi. All rights reserved.',
-                style: GoogleFonts.epilogue(
-                  fontSize: 12,
-                  color: isDark
-                      ? AppTheme.ink3Dark
-                      : const Color(0xFFF5F2EC).withOpacity(0.3),
-                ),),
-              const SizedBox(height: 6),
-              Text(
-                'Flutter Developer · Lucknow, India',
-                textAlign: TextAlign.right,
-                style: GoogleFonts.ibmPlexMono(
-                  fontSize: 11,
-                  color: isDark
-                      ? AppTheme.ink3Dark
-                      : const Color(0xFFF5F2EC).withOpacity(0.3),
-                ),
-              ),
-            ],
-          )
-
         ],
       ),
     );
@@ -162,7 +154,10 @@ class PortfolioFooter extends StatelessWidget {
         RichText(
           text: TextSpan(
             style: GoogleFonts.bebasNeue(
-                fontSize: 28, letterSpacing: 2, color: textColor),
+              fontSize: 32,
+              letterSpacing: 2,
+              color: textColor,
+            ),
             children: [
               const TextSpan(text: 'FA'),
               TextSpan(
@@ -174,9 +169,12 @@ class PortfolioFooter extends StatelessWidget {
         ),
         const SizedBox(height: 12),
         Text(
-          'Flutter Developer at Criterion Tech Pvt Ltd, Lucknow. Building cross-platform mobile apps with clean code and attention to detail.',
+          'Flutter Developer at Criterion Tech Pvt Ltd, Lucknow. Building production cross-platform mobile apps with clean Dart code, GetX architecture, and attention to detail.',
           style: GoogleFonts.epilogue(
-              fontSize: 13, color: subColor, height: 1.7),
+            fontSize: 13,
+            color: subColor,
+            height: 1.65,
+          ),
           maxLines: 4,
         ),
       ],
@@ -205,12 +203,18 @@ class PortfolioFooter extends StatelessWidget {
         Text(
           heading.toUpperCase(),
           style: GoogleFonts.ibmPlexMono(
-              fontSize: 10, letterSpacing: 2, color: headColor),
+            fontSize: 10,
+            letterSpacing: 2,
+            color: headColor,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         const SizedBox(height: 16),
-        ...(socials ? socialItems : items.map((i) => {'label': i, 'url': null}).toList())
+        ...(socials
+                ? socialItems
+                : items.map((i) => {'label': i, 'url': null}).toList())
             .map((item) => Padding(
-                  padding: const EdgeInsets.only(bottom: 10),
+                  padding: const EdgeInsets.only(bottom: 8),
                   child: _FootLink(
                     label: item['label'] as String,
                     isDark: this.isDark,
