@@ -29,13 +29,13 @@ class _FaireenPortfolioAppState extends State<FaireenPortfolioApp> {
           colorScheme: const ColorScheme.light(
             primary: Color(0xFFE8470A),
           ),
-          pageTransitionsTheme:  PageTransitionsTheme(
+          pageTransitionsTheme: PageTransitionsTheme(
             builders: {
-              TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),
-              TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
-              TargetPlatform.windows: FadeUpwardsPageTransitionsBuilder(),
-              TargetPlatform.macOS: CupertinoPageTransitionsBuilder(),
-              TargetPlatform.linux: FadeUpwardsPageTransitionsBuilder(),
+              TargetPlatform.android: const FadeUpwardsPageTransitionsBuilder(),
+              TargetPlatform.iOS: const CupertinoPageTransitionsBuilder(),
+              TargetPlatform.windows: const FadeUpwardsPageTransitionsBuilder(),
+              TargetPlatform.macOS: const CupertinoPageTransitionsBuilder(),
+              TargetPlatform.linux: const FadeUpwardsPageTransitionsBuilder(),
             },
           ),
         ),
