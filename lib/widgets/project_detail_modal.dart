@@ -44,7 +44,7 @@ class ProjectDetailModal extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.4),
+                color: Colors.black.withValues(alpha: 0.4),
                 blurRadius: 40,
                 offset: const Offset(0, 16),
               ),
@@ -66,11 +66,23 @@ class ProjectDetailModal extends StatelessWidget {
                 ),
                 child: Row(
                   children: [
-                    Text(
-                      p.emoji,
-                      style: const TextStyle(fontSize: 28),
+                    Container(
+                      width: 42,
+                      height: 42,
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.15),
+                        border: Border.all(color: Colors.white.withValues(alpha: 0.3)),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Center(
+                        child: Icon(
+                          p.icon,
+                          size: 20,
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
-                    const SizedBox(width: 12),
+                    const SizedBox(width: 14),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -88,7 +100,7 @@ class ProjectDetailModal extends StatelessWidget {
                               p.subtitle,
                               style: GoogleFonts.epilogue(
                                 fontSize: 12,
-                                color: Colors.white.withOpacity(0.8),
+                                color: Colors.white.withValues(alpha: 0.8),
                               ),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
@@ -141,7 +153,7 @@ class ProjectDetailModal extends StatelessWidget {
                                 border: Border.all(color: AppTheme.line(isDark)),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.black.withOpacity(0.2),
+                                    color: Colors.black.withValues(alpha: 0.2),
                                     blurRadius: 10,
                                     offset: const Offset(0, 4),
                                   ),

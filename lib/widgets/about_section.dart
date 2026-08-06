@@ -17,23 +17,25 @@ class AboutSection extends StatelessWidget {
         color: AppTheme.bg(isDark),
         border: Border(top: BorderSide(color: AppTheme.line(isDark))),
       ),
-      child: isWide
-          ? Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(child: _buildLeft()),
-                const SizedBox(width: 60),
-                Expanded(child: _buildRightTimeline()),
-              ],
-            )
-          : Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildLeft(),
-                const SizedBox(height: 48),
-                _buildRightTimeline(),
-              ],
-            ),
+      child: MaxContentContainer(
+        child: isWide
+            ? Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(child: _buildLeft()),
+                  const SizedBox(width: 60),
+                  Expanded(child: _buildRightTimeline()),
+                ],
+              )
+            : Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildLeft(),
+                  const SizedBox(height: 48),
+                  _buildRightTimeline(),
+                ],
+              ),
+      ),
     );
   }
 

@@ -28,25 +28,29 @@ class AppTheme {
   static const Color cyanAccent = Color(0xFF00B4D8);
   static const Color greenAccent = Color(0xFF10B981);
 
+  // Layout & Component Tokens
+  static const double maxContentWidth = 1200.0;
+  static const double cardRadius = 8.0;
+
   static Color orangeDim(bool isDark) =>
-      (isDark ? orangeDark : orange).withOpacity(0.12);
+      (isDark ? orangeDark : orange).withValues(alpha: 0.12);
   static Color orangeMid(bool isDark) =>
-      (isDark ? orangeDark : orange).withOpacity(0.25);
+      (isDark ? orangeDark : orange).withValues(alpha: 0.25);
 
   static Color bg(bool isDark) => isDark ? bgDark : bgLight;
   static Color bg2(bool isDark) => isDark ? bg2Dark : bg2Light;
   static Color bg3(bool isDark) => isDark ? bg3Dark : bg3Light;
   static Color ink(bool isDark) => isDark ? inkDark : inkLight;
-  static Color ink2(bool isDark) => isDark ? isDark ? const Color(0xFFD0CBC2) : ink2Light : ink2Light;
+  static Color ink2(bool isDark) => isDark ? ink2Dark : ink2Light;
   static Color ink3(bool isDark) => isDark ? ink3Dark : ink3Light;
   static Color paper(bool isDark) => isDark ? paperDark : paperLight;
   static Color cardBg(bool isDark) => isDark ? cardBgDark : cardBgLight;
   static Color acc(bool isDark) => isDark ? orangeDark : orange;
 
   static Color line(bool isDark) =>
-      isDark ? Colors.white.withOpacity(0.10) : const Color(0xFF141311).withOpacity(0.12);
+      isDark ? Colors.white.withValues(alpha: 0.10) : const Color(0xFF141311).withValues(alpha: 0.12);
   static Color lineStrong(bool isDark) =>
-      isDark ? Colors.white.withOpacity(0.20) : const Color(0xFF141311).withOpacity(0.25);
+      isDark ? Colors.white.withValues(alpha: 0.20) : const Color(0xFF141311).withValues(alpha: 0.25);
 
   // Text styles
   static TextStyle display(bool isDark, {double size = 64}) => GoogleFonts.bebasNeue(

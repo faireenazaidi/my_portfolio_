@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../theme/app_theme.dart';
@@ -17,34 +18,36 @@ class ContactSection extends StatelessWidget {
         color: AppTheme.bg2(isDark),
         border: Border(top: BorderSide(color: AppTheme.line(isDark))),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SectionHeader(
-            tag: 'Get In Touch',
-            title: "Have a Project in Mind?\nLet's Build Together.",
-            subtitle:
-                'Open for opportunities at product companies, startups, and engineering teams building applications people love.',
-            isDark: isDark,
-          ),
-          const SizedBox(height: 40),
-          isWide
-              ? Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(child: _buildInfo()),
-                    const SizedBox(width: 60),
-                    Expanded(child: _ContactForm(isDark: isDark)),
-                  ],
-                )
-              : Column(
-                  children: [
-                    _buildInfo(),
-                    const SizedBox(height: 40),
-                    _ContactForm(isDark: isDark),
-                  ],
-                ),
-        ],
+      child: MaxContentContainer(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SectionHeader(
+              tag: 'Get In Touch',
+              title: "Have a Project in Mind?\nLet's Build Together.",
+              subtitle:
+                  'Open for opportunities at product companies, startups, and engineering teams building applications people love.',
+              isDark: isDark,
+            ),
+            const SizedBox(height: 40),
+            isWide
+                ? Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(child: _buildInfo()),
+                      const SizedBox(width: 60),
+                      Expanded(child: _ContactForm(isDark: isDark)),
+                    ],
+                  )
+                : Column(
+                    children: [
+                      _buildInfo(),
+                      const SizedBox(height: 40),
+                      _ContactForm(isDark: isDark),
+                    ],
+                  ),
+          ],
+        ),
       ),
     );
   }
@@ -54,19 +57,19 @@ class ContactSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _CItem(
-          icon: '✉️',
+          icon: FontAwesomeIcons.envelope,
           label: 'Email Address',
           value: 'fairenazaidi@gmail.com',
           isDark: isDark,
         ),
         _CItem(
-          icon: '📱',
+          icon: FontAwesomeIcons.phone,
           label: 'Phone / WhatsApp',
           value: '+91 8173822136 / +91 8172800431',
           isDark: isDark,
         ),
         _CItem(
-          icon: '📍',
+          icon: FontAwesomeIcons.locationDot,
           label: 'Location',
           value: 'Noor Colony, Dubagga, Lucknow — 226003, UP, India',
           isDark: isDark,
@@ -77,24 +80,28 @@ class ContactSection extends StatelessWidget {
           runSpacing: 8,
           children: [
             _CSoc(
-              label: '✉️ Email Me',
+              label: 'Email Me',
+              icon: FontAwesomeIcons.envelope,
               isDark: isDark,
               onTap: () =>
                   launchUrl(Uri.parse('mailto:fairenazaidi@gmail.com')),
             ),
             _CSoc(
-              label: 'LinkedIn Profile',
+              label: 'LinkedIn',
+              icon: FontAwesomeIcons.linkedinIn,
               isDark: isDark,
               onTap: () =>
                   launchUrl(Uri.parse('https://linkedin.com/in/')),
             ),
             _CSoc(
-              label: 'GitHub Profile',
+              label: 'GitHub',
+              icon: FontAwesomeIcons.github,
               isDark: isDark,
-              onTap: () => launchUrl(Uri.parse('https://github.com/')),
+              onTap: () => launchUrl(Uri.parse('https://github.com/faireenazaidi')),
             ),
             _CSoc(
-              label: '💬 WhatsApp Chat',
+              label: 'WhatsApp Chat',
+              icon: FontAwesomeIcons.whatsapp,
               isDark: isDark,
               onTap: () =>
                   launchUrl(Uri.parse('https://wa.me/918173822136')),
@@ -107,7 +114,7 @@ class ContactSection extends StatelessWidget {
 }
 
 class _CItem extends StatelessWidget {
-  final String icon;
+  final IconData icon;
   final String label;
   final String value;
   final bool isDark;
@@ -139,7 +146,11 @@ class _CItem extends StatelessWidget {
               borderRadius: BorderRadius.circular(6),
             ),
             child: Center(
-              child: Text(icon, style: const TextStyle(fontSize: 18)),
+              child: Icon(
+                icon,
+                size: 18,
+                color: AppTheme.acc(isDark),
+              ),
             ),
           ),
           const SizedBox(width: 16),
@@ -177,9 +188,15 @@ class _CItem extends StatelessWidget {
 
 class _CSoc extends StatefulWidget {
   final String label;
+  final IconData icon;
   final bool isDark;
   final VoidCallback? onTap;
-  const _CSoc({required this.label, required this.isDark, this.onTap});
+  const _CSoc({
+    required this.label,
+    required this.icon,
+    required this.isDark,
+    this.onTap,
+  });
 
   @override
   State<_CSoc> createState() => _CSocState();
@@ -199,7 +216,7 @@ class _CSocState extends State<_CSoc> {
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
           transform: Matrix4.translationValues(0, _hover ? -2 : 0, 0),
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
           decoration: BoxDecoration(
             color: AppTheme.cardBg(widget.isDark),
             border: Border.all(
@@ -210,16 +227,29 @@ class _CSocState extends State<_CSoc> {
             ),
             borderRadius: BorderRadius.circular(4),
           ),
-          child: Text(
-            widget.label,
-            style: GoogleFonts.epilogue(
-              fontSize: 13,
-              fontWeight: FontWeight.w700,
-              letterSpacing: 1,
-              color: _hover
-                  ? AppTheme.acc(widget.isDark)
-                  : AppTheme.ink2(widget.isDark),
-            ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                widget.icon,
+                size: 14,
+                color: _hover
+                    ? AppTheme.acc(widget.isDark)
+                    : AppTheme.ink2(widget.isDark),
+              ),
+              const SizedBox(width: 8),
+              Text(
+                widget.label,
+                style: GoogleFonts.epilogue(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 0.8,
+                  color: _hover
+                      ? AppTheme.acc(widget.isDark)
+                      : AppTheme.ink2(widget.isDark),
+                ),
+              ),
+            ],
           ),
         ),
       ),

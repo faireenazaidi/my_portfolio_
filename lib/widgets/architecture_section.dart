@@ -20,72 +20,110 @@ class ArchitectureSection extends StatelessWidget {
         color: AppTheme.bg(isDark),
         border: Border(top: BorderSide(color: AppTheme.line(isDark))),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SectionHeader(
-            tag: 'Engineering Approach',
-            title: 'Clean Architecture\n& Code Standards',
-            subtitle:
-                'Building Flutter applications designed for long-term maintainability, strict separation of concerns, and clean data flow.',
-            isDark: isDark,
-          ),
-          const SizedBox(height: 48),
+      child: MaxContentContainer(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SectionHeader(
+              tag: 'Engineering Approach',
+              title: 'Clean Architecture\n& Code Standards',
+              subtitle:
+                  'Building Flutter applications designed for long-term maintainability, strict separation of concerns, and clean data flow.',
+              isDark: isDark,
+            ),
+            const SizedBox(height: 48),
 
-          // Layer Flow Diagram
-          _buildFlowDiagram(isWide),
+            // Layer Flow Diagram
+            _buildFlowDiagram(isWide),
 
-          const SizedBox(height: 56),
+            const SizedBox(height: 56),
 
-          // Engineering Principle Cards Header
-          Row(
-            children: [
-              Container(width: 24, height: 1.5, color: AppTheme.acc(isDark)),
-              const SizedBox(width: 10),
-              Text(
-                'CORE TECHNICAL PRINCIPLES',
-                style: GoogleFonts.ibmPlexMono(
-                  fontSize: 11,
-                  letterSpacing: 1.8,
-                  color: AppTheme.acc(isDark),
-                  fontWeight: FontWeight.w500,
+            // Engineering Principle Cards Header
+            Row(
+              children: [
+                Container(width: 24, height: 1.5, color: AppTheme.acc(isDark)),
+                const SizedBox(width: 10),
+                Text(
+                  'CORE TECHNICAL PRINCIPLES',
+                  style: GoogleFonts.ibmPlexMono(
+                    fontSize: 11,
+                    letterSpacing: 1.8,
+                    color: AppTheme.acc(isDark),
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 24),
+              ],
+            ),
+            const SizedBox(height: 24),
 
-          // Grid of Principle Cards
-          LayoutBuilder(
-            builder: (ctx, constraints) {
-              final cols = w > 1100 ? 4 : w > 700 ? 2 : 1;
-              final cardW =
-                  (constraints.maxWidth - (cols - 1) * 16) / cols;
-              return Wrap(
-                spacing: 16,
-                runSpacing: 16,
-                children: kEngineeringPrinciples
-                    .map(
-                      (p) => SizedBox(
-                        width: cardW,
-                        child: _PrincipleCard(
-                          principle: p,
-                          isDark: isDark,
-                        ),
+            // Grid of Principle Cards
+            LayoutBuilder(
+              builder: (ctx, constraints) {
+                final cols = w > 1100 ? 4 : w > 700 ? 2 : 1;
+                if (cols == 1) {
+                  return Column(
+                    children: kEngineeringPrinciples
+                        .map(
+                          (p) => Padding(
+                            padding: const EdgeInsets.only(bottom: 16),
+                            child: _PrincipleCard(
+                              principle: p,
+                              isDark: isDark,
+                            ),
+                          ),
+                        )
+                        .toList(),
+                  );
+                }
+
+                List<Widget> cardRows = [];
+                for (int i = 0; i < kEngineeringPrinciples.length; i += cols) {
+                  final chunk = kEngineeringPrinciples.sublist(
+                    i,
+                    (i + cols) < kEngineeringPrinciples.length
+                        ? (i + cols)
+                        : kEngineeringPrinciples.length,
+                  );
+                  final cardW =
+                      (constraints.maxWidth - (cols - 1) * 16) / cols;
+
+                  cardRows.add(
+                    IntrinsicHeight(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          for (int j = 0; j < chunk.length; j++) ...[
+                            if (j > 0) const SizedBox(width: 16),
+                            SizedBox(
+                              width: cardW,
+                              child: _PrincipleCard(
+                                principle: chunk[j],
+                                isDark: isDark,
+                                isIntrinsic: true,
+                              ),
+                            ),
+                          ],
+                        ],
                       ),
-                    )
-                    .toList(),
-              );
-            },
-          ),
-        ],
+                    ),
+                  );
+                  if (i + cols < kEngineeringPrinciples.length) {
+                    cardRows.add(const SizedBox(height: 16));
+                  }
+                }
+
+                return Column(children: cardRows);
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildFlowDiagram(bool isWide) {
     return Container(
-      padding: const EdgeInsets.all(28),
+      padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         color: AppTheme.bg2(isDark),
         border: Border.all(color: AppTheme.line(isDark)),
@@ -103,40 +141,44 @@ class ArchitectureSection extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 18),
           isWide
-              ? Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: kArchitectureLayers.asMap().entries.map((e) {
-                    final i = e.key;
-                    final layer = e.value;
-                    final isLast = i == kArchitectureLayers.length - 1;
-                    return Expanded(
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: _LayerNode(
-                              layer: layer,
-                              isDark: isDark,
-                            ),
-                          ),
-                          if (!isLast)
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 6),
-                              child: Text(
-                                '➔',
-                                style: TextStyle(
-                                  color: AppTheme.acc(isDark),
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
+              ? IntrinsicHeight(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: kArchitectureLayers.asMap().entries.map((e) {
+                      final i = e.key;
+                      final layer = e.value;
+                      final isLast = i == kArchitectureLayers.length - 1;
+                      return Expanded(
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              child: _LayerNode(
+                                layer: layer,
+                                isDark: isDark,
+                                height: double.infinity,
                               ),
                             ),
-                        ],
-                      ),
-                    );
-                  }).toList(),
+                            if (!isLast)
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 4),
+                                child: Text(
+                                  '➔',
+                                  style: TextStyle(
+                                    color: AppTheme.acc(isDark),
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
+                      );
+                    }).toList(),
+                  ),
                 )
               : Column(
                   children: kArchitectureLayers.asMap().entries.map((e) {
@@ -171,13 +213,19 @@ class ArchitectureSection extends StatelessWidget {
 class _LayerNode extends StatelessWidget {
   final ArchitectureLayerItem layer;
   final bool isDark;
+  final double? height;
 
-  const _LayerNode({required this.layer, required this.isDark});
+  const _LayerNode({
+    required this.layer,
+    required this.isDark,
+    this.height,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(14),
+      height: height,
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: AppTheme.cardBg(isDark),
         border: Border.all(color: AppTheme.line(isDark)),
@@ -185,31 +233,32 @@ class _LayerNode extends StatelessWidget {
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Text(
             layer.layerName,
             style: GoogleFonts.bebasNeue(
-              fontSize: 18,
+              fontSize: 17,
               letterSpacing: 1,
               color: AppTheme.acc(isDark),
             ),
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: 2),
           Text(
             layer.subtitle,
             style: GoogleFonts.epilogue(
-              fontSize: 11,
+              fontSize: 10.5,
               fontWeight: FontWeight.w600,
               color: AppTheme.ink(isDark),
             ),
           ),
-          const SizedBox(height: 6),
+          const SizedBox(height: 4),
           Text(
             layer.description,
             style: GoogleFonts.epilogue(
-              fontSize: 11,
+              fontSize: 10.5,
               color: AppTheme.ink3(isDark),
-              height: 1.4,
+              height: 1.35,
             ),
             maxLines: 3,
             overflow: TextOverflow.ellipsis,
@@ -223,8 +272,13 @@ class _LayerNode extends StatelessWidget {
 class _PrincipleCard extends StatefulWidget {
   final EngineeringPrincipleItem principle;
   final bool isDark;
+  final bool isIntrinsic;
 
-  const _PrincipleCard({required this.principle, required this.isDark});
+  const _PrincipleCard({
+    required this.principle,
+    required this.isDark,
+    this.isIntrinsic = false,
+  });
 
   @override
   State<_PrincipleCard> createState() => _PrincipleCardState();
@@ -243,8 +297,9 @@ class _PrincipleCardState extends State<_PrincipleCard> {
       onExit: (_) => setState(() => _hover = false),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
+        height: widget.isIntrinsic ? double.infinity : null,
         transform: Matrix4.translationValues(0, _hover ? -3 : 0, 0),
-        padding: const EdgeInsets.all(18),
+        padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: AppTheme.cardBg(isDark),
           border: Border.all(
@@ -255,16 +310,32 @@ class _PrincipleCardState extends State<_PrincipleCard> {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(p.icon, style: const TextStyle(fontSize: 22)),
+            Container(
+              width: 36,
+              height: 36,
+              decoration: BoxDecoration(
+                color: AppTheme.orangeDim(isDark),
+                border: Border.all(color: AppTheme.orangeMid(isDark)),
+                borderRadius: BorderRadius.circular(6),
+              ),
+              child: Center(
+                child: Icon(
+                  p.icon,
+                  size: 16,
+                  color: AppTheme.acc(isDark),
+                ),
+              ),
+            ),
             const SizedBox(width: 12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
                     p.title,
                     style: GoogleFonts.epilogue(
-                      fontSize: 14,
+                      fontSize: 13.5,
                       fontWeight: FontWeight.w700,
                       color: AppTheme.ink(isDark),
                     ),
@@ -273,10 +344,10 @@ class _PrincipleCardState extends State<_PrincipleCard> {
                   Text(
                     p.description,
                     style: GoogleFonts.epilogue(
-                      fontSize: 12,
+                      fontSize: 11.5,
                       color: AppTheme.ink2(isDark),
                       fontWeight: FontWeight.w300,
-                      height: 1.5,
+                      height: 1.4,
                     ),
                   ),
                 ],

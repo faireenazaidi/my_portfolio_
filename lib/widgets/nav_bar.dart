@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../theme/app_theme.dart';
+import 'common_widgets.dart';
 
 class PortfolioNav extends StatefulWidget implements PreferredSizeWidget {
   final bool isDark;
@@ -63,74 +64,76 @@ class _PortfolioNavState extends State<PortfolioNav> {
           SafeArea(
             child: SizedBox(
               height: 60,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: Row(
-                  children: [
-                    // Brand Logo
-                    MouseRegion(
-                      cursor: SystemMouseCursors.click,
-                      child: GestureDetector(
-                        onTap: () => widget.onNav('hero'),
-                        child: RichText(
-                          text: TextSpan(
-                            style: GoogleFonts.bebasNeue(
-                              fontSize: 24,
-                              letterSpacing: 1.5,
-                              color: AppTheme.ink(isDark),
-                            ),
-                            children: [
-                              const TextSpan(text: 'FAIREENA'),
-                              TextSpan(
-                                text: '.',
-                                style: TextStyle(color: AppTheme.acc(isDark)),
+              child: MaxContentContainer(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: Row(
+                    children: [
+                      // Brand Logo
+                      MouseRegion(
+                        cursor: SystemMouseCursors.click,
+                        child: GestureDetector(
+                          onTap: () => widget.onNav('hero'),
+                          child: RichText(
+                            text: TextSpan(
+                              style: GoogleFonts.bebasNeue(
+                                fontSize: 24,
+                                letterSpacing: 1.5,
+                                color: AppTheme.ink(isDark),
                               ),
-                              TextSpan(
-                                text: 'DEV',
-                                style: TextStyle(
-                                  color: AppTheme.acc(isDark),
-                                  fontSize: 14,
+                              children: [
+                                const TextSpan(text: 'FAIREENA'),
+                                TextSpan(
+                                  text: '.',
+                                  style: TextStyle(color: AppTheme.acc(isDark)),
                                 ),
-                              ),
-                            ],
+                                TextSpan(
+                                  text: 'DEV',
+                                  style: TextStyle(
+                                    color: AppTheme.acc(isDark),
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    const Spacer(),
+                      const Spacer(),
 
-                    // Desktop Navigation Links
-                    if (isWide) ...[
-                      ..._links.map(
-                        (l) => _NavLink(
-                          label: l,
-                          isDark: isDark,
-                          onTap: () => widget.onNav(l.toLowerCase()),
+                      // Desktop Navigation Links
+                      if (isWide) ...[
+                        ..._links.map(
+                          (l) => _NavLink(
+                            label: l,
+                            isDark: isDark,
+                            onTap: () => widget.onNav(l.toLowerCase()),
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 16),
-                    ],
+                        const SizedBox(width: 16),
+                      ],
 
-                    // Theme Mode Toggle Button
-                    _ModeBtn(
-                      isDark: isDark,
-                      onTap: widget.onToggleTheme,
-                    ),
-                    const SizedBox(width: 8),
-
-                    // Resume CTA Button in Nav
-                    _ResumeNavBtn(isDark: isDark),
-
-                    // Mobile Drawer Hamburger
-                    if (!isWide) ...[
-                      const SizedBox(width: 8),
-                      _HamburgerBtn(
+                      // Theme Mode Toggle Button
+                      _ModeBtn(
                         isDark: isDark,
-                        links: _links,
-                        onNav: widget.onNav,
+                        onTap: widget.onToggleTheme,
                       ),
+                      const SizedBox(width: 8),
+
+                      // Resume CTA Button in Nav
+                      _ResumeNavBtn(isDark: isDark),
+
+                      // Mobile Drawer Hamburger
+                      if (!isWide) ...[
+                        const SizedBox(width: 8),
+                        _HamburgerBtn(
+                          isDark: isDark,
+                          links: _links,
+                          onNav: widget.onNav,
+                        ),
+                      ],
                     ],
-                  ],
+                  ),
                 ),
               ),
             ),
@@ -290,7 +293,7 @@ class _ResumeNavBtnState extends State<_ResumeNavBtn> {
             boxShadow: _hover
                 ? [
                     BoxShadow(
-                      color: AppTheme.acc(widget.isDark).withOpacity(0.3),
+                      color: AppTheme.acc(widget.isDark).withValues(alpha: 0.3),
                       blurRadius: 16,
                       offset: const Offset(0, 4),
                     )

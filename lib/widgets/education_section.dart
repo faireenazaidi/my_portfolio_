@@ -11,41 +11,42 @@ class EducationSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-
       padding: const EdgeInsets.symmetric(vertical: 80, horizontal: 32),
       decoration: BoxDecoration(
         color: AppTheme.bg(isDark),
         border: Border(top: BorderSide(color: AppTheme.line(isDark))),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SectionHeader(
-            tag: 'Education',
-            title: 'Academic\nBackground',
-            subtitle:
-                'A consistent academic record across Science, Mathematics, and Computer Applications.',
-            isDark: isDark,
-          ),
-          const SizedBox(height: 40),
-          Container(
-            decoration: BoxDecoration(
-              border: Border.all(color: AppTheme.line(isDark)),
-              borderRadius: BorderRadius.circular(8),
+      child: MaxContentContainer(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SectionHeader(
+              tag: 'Education',
+              title: 'Academic\nBackground',
+              subtitle:
+                  'A consistent academic record across Science, Mathematics, and Computer Applications.',
+              isDark: isDark,
             ),
-            child: Column(
-              children: kEducation.asMap().entries.map((e) {
-                final i = e.key;
-                final item = e.value;
-                return _EduRow(
-                  item: item,
-                  isDark: isDark,
-                  isLast: i == kEducation.length - 1,
-                );
-              }).toList(),
+            const SizedBox(height: 40),
+            Container(
+              decoration: BoxDecoration(
+                border: Border.all(color: AppTheme.line(isDark)),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Column(
+                children: kEducation.asMap().entries.map((e) {
+                  final i = e.key;
+                  final item = e.value;
+                  return _EduRow(
+                    item: item,
+                    isDark: isDark,
+                    isLast: i == kEducation.length - 1,
+                  );
+                }).toList(),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

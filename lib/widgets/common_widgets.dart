@@ -71,6 +71,9 @@ class SectionHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final w = MediaQuery.of(context).size.width;
+    final isMobile = w <= 600;
+
     return Column(
       crossAxisAlignment: alignment,
       children: [
@@ -84,7 +87,7 @@ class SectionHeader extends StatelessWidget {
             Text(
               tag.toUpperCase(),
               style: GoogleFonts.ibmPlexMono(
-                fontSize: 11,
+                fontSize: isMobile ? 10 : 11,
                 letterSpacing: 1.8,
                 color: AppTheme.acc(isDark),
                 fontWeight: FontWeight.w500,
@@ -92,25 +95,25 @@ class SectionHeader extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: 14),
+        const SizedBox(height: 10),
         Text(
           title,
           style: GoogleFonts.bebasNeue(
-            fontSize: 56,
+            fontSize: isMobile ? 36 : 56,
             letterSpacing: 1.2,
             color: AppTheme.ink(isDark),
             height: 0.95,
           ),
         ),
         if (subtitle != null) ...[
-          const SizedBox(height: 14),
+          const SizedBox(height: 10),
           Text(
             subtitle!,
             style: GoogleFonts.epilogue(
-              fontSize: 15,
+              fontSize: isMobile ? 13.5 : 15,
               color: AppTheme.ink2(isDark),
               fontWeight: FontWeight.w300,
-              height: 1.75,
+              height: 1.6,
             ),
           ),
         ],
@@ -360,6 +363,96 @@ class _RevealOnScrollState extends State<RevealOnScroll>
   }
 }
 
+// ── Max Content Width Layout Wrapper ──
+class MaxContentContainer extends StatelessWidget {
+  final Widget child;
+  final double maxWidth;
+  final AlignmentGeometry alignment;
+
+  const MaxContentContainer({
+    super.key,
+    required this.child,
+    this.maxWidth = AppTheme.maxContentWidth,
+    this.alignment = Alignment.center,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: alignment,
+      child: ConstrainedBox(
+        constraints: BoxConstraints(maxWidth: maxWidth),
+        child: child,
+      ),
+    );
+  }
+}
+
+// ── Shared Reusable Hover Card ──
+class HoverCard extends StatefulWidget {
+  final Widget child;
+  final bool isDark;
+  final EdgeInsetsGeometry? padding;
+  final VoidCallback? onTap;
+  final double borderRadius;
+  final Color? backgroundColor;
+  final double? height;
+
+  const HoverCard({
+    super.key,
+    required this.child,
+    required this.isDark,
+    this.padding,
+    this.onTap,
+    this.borderRadius = AppTheme.cardRadius,
+    this.backgroundColor,
+    this.height,
+  });
+
+  @override
+  State<HoverCard> createState() => _HoverCardState();
+}
+
+class _HoverCardState extends State<HoverCard> {
+  bool _hover = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      onEnter: (_) => setState(() => _hover = true),
+      onExit: (_) => setState(() => _hover = false),
+      cursor: widget.onTap != null ? SystemMouseCursors.click : SystemMouseCursors.basic,
+      child: GestureDetector(
+        onTap: widget.onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 250),
+          height: widget.height,
+          transform: Matrix4.translationValues(0, _hover ? -4 : 0, 0),
+          padding: widget.padding,
+          decoration: BoxDecoration(
+            color: widget.backgroundColor ?? AppTheme.cardBg(widget.isDark),
+            border: Border.all(
+              color: _hover ? AppTheme.acc(widget.isDark) : AppTheme.line(widget.isDark),
+              width: 1.5,
+            ),
+            borderRadius: BorderRadius.circular(widget.borderRadius),
+            boxShadow: _hover
+                ? [
+                    BoxShadow(
+                      color: AppTheme.acc(widget.isDark).withValues(alpha: 0.1),
+                      blurRadius: 30,
+                      offset: const Offset(0, 10),
+                    )
+                  ]
+                : [],
+          ),
+          child: widget.child,
+        ),
+      ),
+    );
+  }
+}
+
 // ── Hover Button — Orange filled ──
 class OrangeButton extends StatefulWidget {
   final String label;
@@ -398,7 +491,7 @@ class _OrangeButtonState extends State<OrangeButton> {
             boxShadow: _hover
                 ? [
                     BoxShadow(
-                      color: AppTheme.acc(widget.isDark).withOpacity(0.3),
+                      color: AppTheme.acc(widget.isDark).withValues(alpha: 0.3),
                       blurRadius: 28,
                       offset: const Offset(0, 10),
                     )

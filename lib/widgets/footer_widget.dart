@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../theme/app_theme.dart';
+import 'common_widgets.dart';
 
 class PortfolioFooter extends StatelessWidget {
   final bool isDark;
@@ -19,29 +20,65 @@ class PortfolioFooter extends StatelessWidget {
     final textColor = isDark ? AppTheme.inkDark : const Color(0xFFF5F2EC);
     final subColor = isDark
         ? AppTheme.ink3Dark
-        : const Color(0xFFF5F2EC).withOpacity(0.5);
+        : const Color(0xFFF5F2EC).withValues(alpha: 0.5);
     final headColor = isDark
         ? AppTheme.ink3Dark
-        : const Color(0xFFF5F2EC).withOpacity(0.35);
+        : const Color(0xFFF5F2EC).withValues(alpha: 0.35);
     final linkColor = isDark
         ? AppTheme.ink3Dark
-        : const Color(0xFFF5F2EC).withOpacity(0.6);
+        : const Color(0xFFF5F2EC).withValues(alpha: 0.6);
 
     final isWide = MediaQuery.of(context).size.width > 750;
 
     return Container(
       color: bgColor,
       padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 48),
-      child: Column(
-        children: [
-          isWide
-              ? Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(flex: 2, child: _buildBrand(textColor, subColor)),
-                    const SizedBox(width: 40),
-                    Expanded(
-                      child: _buildLinks(
+      child: MaxContentContainer(
+        child: Column(
+          children: [
+            isWide
+                ? Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(flex: 2, child: _buildBrand(textColor, subColor)),
+                      const SizedBox(width: 40),
+                      Expanded(
+                        child: _buildLinks(
+                          'Navigate',
+                          headColor,
+                          linkColor,
+                          [
+                            'About',
+                            'Specialization',
+                            'Skills',
+                            'Experience',
+                            'Projects',
+                            'Architecture',
+                            'Contact'
+                          ],
+                          onNav,
+                        ),
+                      ),
+                      const SizedBox(width: 40),
+                      Expanded(
+                        child: _buildLinks(
+                          'Connect',
+                          headColor,
+                          linkColor,
+                          [],
+                          null,
+                          socials: true,
+                          isDark: isDark,
+                        ),
+                      ),
+                    ],
+                  )
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildBrand(textColor, subColor),
+                      const SizedBox(height: 32),
+                      _buildLinks(
                         'Navigate',
                         headColor,
                         linkColor,
@@ -56,50 +93,15 @@ class PortfolioFooter extends StatelessWidget {
                         ],
                         onNav,
                       ),
-                    ),
-                    const SizedBox(width: 40),
-                    Expanded(
-                      child: _buildLinks(
-                        'Connect',
-                        headColor,
-                        linkColor,
-                        [],
-                        null,
-                        socials: true,
-                        isDark: isDark,
-                      ),
-                    ),
-                  ],
-                )
-              : Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildBrand(textColor, subColor),
-                    const SizedBox(height: 32),
-                    _buildLinks(
-                      'Navigate',
-                      headColor,
-                      linkColor,
-                      [
-                        'About',
-                        'Specialization',
-                        'Skills',
-                        'Experience',
-                        'Projects',
-                        'Architecture',
-                        'Contact'
-                      ],
-                      onNav,
-                    ),
-                  ],
-                ),
-          const SizedBox(height: 36),
-          Divider(
-            color: isDark
-                ? AppTheme.line(isDark)
-                : Colors.white.withOpacity(0.1),
-            height: 1,
-          ),
+                    ],
+                  ),
+            const SizedBox(height: 36),
+            Divider(
+              color: isDark
+                  ? AppTheme.line(isDark)
+                  : Colors.white.withValues(alpha: 0.1),
+              height: 1,
+            ),
           const SizedBox(height: 24),
           isWide
               ? Row(
@@ -142,7 +144,8 @@ class PortfolioFooter extends StatelessWidget {
                     ),
                   ],
                 ),
-        ],
+          ],
+        ),
       ),
     );
   }

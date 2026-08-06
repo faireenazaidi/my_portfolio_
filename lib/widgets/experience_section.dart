@@ -4,22 +4,14 @@ import '../theme/app_theme.dart';
 import '../models/content.dart';
 import 'common_widgets.dart';
 
-class ExperienceSection extends StatefulWidget {
+class ExperienceSection extends StatelessWidget {
   final bool isDark;
   const ExperienceSection({super.key, required this.isDark});
-
-  @override
-  State<ExperienceSection> createState() => _ExperienceSectionState();
-}
-
-class _ExperienceSectionState extends State<ExperienceSection> {
-  bool _hover = false;
 
   @override
   Widget build(BuildContext context) {
     final w = MediaQuery.of(context).size.width;
     final isWide = w > 900;
-    final isDark = widget.isDark;
 
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 80, horizontal: 32),
@@ -27,39 +19,21 @@ class _ExperienceSectionState extends State<ExperienceSection> {
         color: AppTheme.bg(isDark),
         border: Border(top: BorderSide(color: AppTheme.line(isDark))),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SectionHeader(
-            tag: 'Work Experience',
-            title: 'Professional Timeline',
-            subtitle:
-                'Hands-on cross-platform engineering, sprint contributions, and Google Play Store app delivery.',
-            isDark: isDark,
-          ),
-          const SizedBox(height: 40),
-          MouseRegion(
-            onEnter: (_) => setState(() => _hover = true),
-            onExit: (_) => setState(() => _hover = false),
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 250),
-              decoration: BoxDecoration(
-                color: AppTheme.cardBg(isDark),
-                border: Border.all(
-                  color: _hover ? AppTheme.acc(isDark) : AppTheme.line(isDark),
-                  width: 1.5,
-                ),
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: _hover
-                    ? [
-                        BoxShadow(
-                          color: AppTheme.acc(isDark).withOpacity(0.1),
-                          blurRadius: 40,
-                          offset: const Offset(0, 10),
-                        )
-                      ]
-                    : [],
-              ),
+      child: MaxContentContainer(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SectionHeader(
+              tag: 'Work Experience',
+              title: 'Professional Timeline',
+              subtitle:
+                  'Hands-on cross-platform engineering, sprint contributions, and Google Play Store app delivery.',
+              isDark: isDark,
+            ),
+            const SizedBox(height: 40),
+            HoverCard(
+              isDark: isDark,
+              padding: EdgeInsets.zero,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -180,8 +154,8 @@ class _ExperienceSectionState extends State<ExperienceSection> {
                 ],
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -233,8 +207,8 @@ class _ExperienceSectionState extends State<ExperienceSection> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
       decoration: BoxDecoration(
-        color: Colors.green.withOpacity(0.12),
-        border: Border.all(color: Colors.green.withOpacity(0.35)),
+        color: Colors.green.withValues(alpha: 0.12),
+        border: Border.all(color: Colors.green.withValues(alpha: 0.35)),
         borderRadius: BorderRadius.circular(4),
       ),
       child: Row(

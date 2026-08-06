@@ -21,42 +21,40 @@ class GitHubSection extends StatelessWidget {
         color: AppTheme.bg2(isDark),
         border: Border(top: BorderSide(color: AppTheme.line(isDark))),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SectionHeader(
-            tag: 'Open Source & Code',
-            title: 'GitHub & Repositories',
-            subtitle:
-                'Explore my public code repositories, open source contributions, and Flutter code samples on GitHub.',
-            isDark: isDark,
-          ),
-          const SizedBox(height: 40),
-          Container(
-            padding: const EdgeInsets.all(32),
-            decoration: BoxDecoration(
-              color: AppTheme.cardBg(isDark),
-              border: Border.all(color: AppTheme.line(isDark)),
-              borderRadius: BorderRadius.circular(8),
+      child: MaxContentContainer(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SectionHeader(
+              tag: 'Open Source & Code',
+              title: 'GitHub & Repositories',
+              subtitle:
+                  'Explore my public code repositories, open source contributions, and Flutter code samples on GitHub.',
+              isDark: isDark,
             ),
-            child: isWide
-                ? Row(
-                    children: [
-                      Expanded(child: _buildInfo()),
-                      const SizedBox(width: 40),
-                      _buildCtaButton(),
-                    ],
-                  )
-                : Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildInfo(),
-                      const SizedBox(height: 24),
-                      _buildCtaButton(),
-                    ],
-                  ),
-          ),
-        ],
+            const SizedBox(height: 40),
+            HoverCard(
+              isDark: isDark,
+              padding: const EdgeInsets.all(32),
+              child: isWide
+                  ? Row(
+                      children: [
+                        Expanded(child: _buildInfo()),
+                        const SizedBox(width: 40),
+                        _buildCtaButton(),
+                      ],
+                    )
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildInfo(),
+                        const SizedBox(height: 24),
+                        _buildCtaButton(),
+                      ],
+                    ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -124,7 +122,7 @@ class _RepoPill extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
-        color: Colors.black.withOpacity(0.05),
+        color: Colors.black.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(4),
       ),
       child: Text(

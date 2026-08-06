@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 import '../theme/theme_notifier.dart';
@@ -113,11 +112,9 @@ class _HomeScreenState extends State<HomeScreen>
             children: [
               SingleChildScrollView(
                 controller: _scroll,
-                physics: kIsWeb
-                    ? const ClampingScrollPhysics()
-                    : const BouncingScrollPhysics(
-                        parent: AlwaysScrollableScrollPhysics(),
-                      ),
+                physics: const BouncingScrollPhysics(
+                  parent: AlwaysScrollableScrollPhysics(),
+                ),
                 child: Column(
                   children: [
                     // 1. Hero Section
@@ -254,7 +251,7 @@ class _BttBtnState extends State<_BttBtn> {
             boxShadow: _hover
                 ? [
                     BoxShadow(
-                      color: AppTheme.acc(widget.isDark).withOpacity(0.4),
+                      color: AppTheme.acc(widget.isDark).withValues(alpha: 0.4),
                       blurRadius: 20,
                       offset: const Offset(0, 6),
                     )

@@ -12,168 +12,204 @@ class SpecializationSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final w = MediaQuery.of(context).size.width;
+    final isMobile = w <= 600;
     final cols = w > 1000 ? 4 : w > 650 ? 2 : 1;
 
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 80, horizontal: 32),
+      padding: EdgeInsets.symmetric(
+        vertical: isMobile ? 48 : 80,
+        horizontal: isMobile ? 16 : 32,
+      ),
       decoration: BoxDecoration(
         color: AppTheme.bg2(isDark),
         border: Border(top: BorderSide(color: AppTheme.line(isDark))),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SectionHeader(
-            tag: 'What I Build',
-            title: 'Core Specializations',
-            subtitle:
-                'Delivering production-grade cross-platform mobile solutions tailored for scalability, performance, and user engagement.',
-            isDark: isDark,
-          ),
-          const SizedBox(height: 40),
-          LayoutBuilder(
-            builder: (ctx, constraints) {
-              final itemW =
-                  (constraints.maxWidth - (cols - 1) * 20) / cols;
-              return Wrap(
-                spacing: 20,
-                runSpacing: 20,
-                children: kSpecializations
-                    .map(
-                      (item) => SizedBox(
-                        width: itemW,
-                        child: _SpecializationCard(
-                          item: item,
-                          isDark: isDark,
-                        ),
+      child: MaxContentContainer(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SectionHeader(
+              tag: 'What I Build',
+              title: 'Core Specializations',
+              subtitle:
+                  'Delivering production-grade cross-platform mobile solutions tailored for scalability and performance.',
+              isDark: isDark,
+            ),
+            const SizedBox(height: 36),
+            LayoutBuilder(
+              builder: (ctx, constraints) {
+                if (cols == 1) {
+                  return Column(
+                    children: kSpecializations
+                        .map(
+                          (item) => Padding(
+                            padding: const EdgeInsets.only(bottom: 20),
+                            child: _SpecializationCard(
+                              item: item,
+                              isDark: isDark,
+                              isMobile: isMobile,
+                              isIntrinsic: false,
+                            ),
+                          ),
+                        )
+                        .toList(),
+                  );
+                }
+
+                List<Widget> cardRows = [];
+                for (int i = 0; i < kSpecializations.length; i += cols) {
+                  final chunk = kSpecializations.sublist(
+                    i,
+                    (i + cols) < kSpecializations.length
+                        ? (i + cols)
+                        : kSpecializations.length,
+                  );
+                  final itemW =
+                      (constraints.maxWidth - (cols - 1) * 20) / cols;
+
+                  cardRows.add(
+                    IntrinsicHeight(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          for (int j = 0; j < chunk.length; j++) ...[
+                            if (j > 0) const SizedBox(width: 20),
+                            SizedBox(
+                              width: itemW,
+                              child: _SpecializationCard(
+                                item: chunk[j],
+                                isDark: isDark,
+                                isMobile: isMobile,
+                                isIntrinsic: true,
+                              ),
+                            ),
+                          ],
+                        ],
                       ),
-                    )
-                    .toList(),
-              );
-            },
-          ),
-        ],
+                    ),
+                  );
+                  if (i + cols < kSpecializations.length) {
+                    cardRows.add(const SizedBox(height: 20));
+                  }
+                }
+
+                return Column(children: cardRows);
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
 }
 
-class _SpecializationCard extends StatefulWidget {
+class _SpecializationCard extends StatelessWidget {
   final SpecializationItem item;
   final bool isDark;
+  final bool isMobile;
+  final bool isIntrinsic;
 
   const _SpecializationCard({
     required this.item,
     required this.isDark,
+    this.isMobile = false,
+    this.isIntrinsic = false,
   });
 
   @override
-  State<_SpecializationCard> createState() => _SpecializationCardState();
-}
-
-class _SpecializationCardState extends State<_SpecializationCard> {
-  bool _hover = false;
-
-  @override
   Widget build(BuildContext context) {
-    final item = widget.item;
-    final isDark = widget.isDark;
-
-    return MouseRegion(
-      onEnter: (_) => setState(() => _hover = true),
-      onExit: (_) => setState(() => _hover = false),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 250),
-        transform: Matrix4.translationValues(0, _hover ? -4 : 0, 0),
-        padding: const EdgeInsets.all(24),
-        decoration: BoxDecoration(
-          color: AppTheme.cardBg(isDark),
-          border: Border.all(
-            color: _hover ? AppTheme.acc(isDark) : AppTheme.line(isDark),
-            width: 1.5,
-          ),
-          borderRadius: BorderRadius.circular(8),
-          boxShadow: _hover
-              ? [
-                  BoxShadow(
-                    color: AppTheme.acc(isDark).withOpacity(0.1),
-                    blurRadius: 30,
-                    offset: const Offset(0, 10),
-                  )
-                ]
-              : [],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                color: AppTheme.orangeDim(isDark),
-                border: Border.all(color: AppTheme.orangeMid(isDark)),
-                borderRadius: BorderRadius.circular(6),
-              ),
-              child: Center(
-                child: Text(
-                  item.icon,
-                  style: const TextStyle(fontSize: 22),
+    return HoverCard(
+      isDark: isDark,
+      height: isIntrinsic ? double.infinity : null,
+      padding: EdgeInsets.symmetric(
+        horizontal: isMobile ? 16 : 20,
+        vertical: isMobile ? 16 : 20,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: isIntrinsic
+            ? MainAxisAlignment.spaceBetween
+            : MainAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: AppTheme.orangeDim(isDark),
+                  border: Border.all(color: AppTheme.orangeMid(isDark)),
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: Center(
+                  child: Icon(
+                    item.icon,
+                    size: 18,
+                    color: AppTheme.acc(isDark),
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(height: 20),
-            Text(
-              item.title,
-              style: GoogleFonts.bebasNeue(
-                fontSize: 24,
-                letterSpacing: 1.2,
-                color: AppTheme.ink(isDark),
+              const SizedBox(height: 12),
+              Text(
+                item.title,
+                style: GoogleFonts.bebasNeue(
+                  fontSize: isMobile ? 20 : 22,
+                  letterSpacing: 1.1,
+                  color: AppTheme.ink(isDark),
+                ),
               ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              item.description,
-              style: GoogleFonts.epilogue(
-                fontSize: 13,
-                color: AppTheme.ink2(isDark),
-                fontWeight: FontWeight.w300,
-                height: 1.6,
+              const SizedBox(height: 4),
+              Text(
+                item.description,
+                style: GoogleFonts.epilogue(
+                  fontSize: 12.5,
+                  color: AppTheme.ink2(isDark),
+                  fontWeight: FontWeight.w300,
+                  height: 1.45,
+                ),
               ),
-            ),
-            const SizedBox(height: 16),
-            Divider(color: AppTheme.line(isDark), height: 1),
-            const SizedBox(height: 14),
-            ...item.highlights.map(
-              (h) => Padding(
-                padding: const EdgeInsets.only(bottom: 6),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '✓ ',
-                      style: TextStyle(
-                        color: AppTheme.acc(isDark),
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Expanded(
-                      child: Text(
-                        h,
-                        style: GoogleFonts.epilogue(
-                          fontSize: 12,
-                          color: AppTheme.ink3(isDark),
-                          fontWeight: FontWeight.w400,
-                          height: 1.4,
+            ],
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 10),
+              Divider(color: AppTheme.line(isDark), height: 1),
+              const SizedBox(height: 10),
+              ...item.highlights.map(
+                (h) => Padding(
+                  padding: const EdgeInsets.only(bottom: 4),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '✓ ',
+                        style: TextStyle(
+                          color: AppTheme.acc(isDark),
+                          fontSize: 11.5,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
-                    ),
-                  ],
+                      Expanded(
+                        child: Text(
+                          h,
+                          style: GoogleFonts.epilogue(
+                            fontSize: 11.5,
+                            color: AppTheme.ink3(isDark),
+                            fontWeight: FontWeight.w400,
+                            height: 1.35,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
-        ),
+            ],
+          ),
+        ],
       ),
     );
   }

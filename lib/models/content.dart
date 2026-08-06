@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'portfolio_data.dart';
 
 const List<String> kRoles = [
@@ -26,52 +27,48 @@ const List<SpecializationItem> kSpecializations = [
     id: 'cross-platform',
     title: 'Cross-Platform Apps',
     description:
-        'High-performance Android and iOS mobile applications built with a single, maintainable Flutter codebase.',
-    icon: '📱',
+        'High-performance Android & iOS apps from a single, maintainable Flutter codebase.',
+    icon: FontAwesomeIcons.mobileScreenButton,
     highlights: [
-      'iOS & Android pixel-perfect consistency',
-      'Native device capability integrations',
-      'Responsive web & tablet scaling',
-      'Optimized 60fps UI render loop',
+      'iOS & Android UI consistency',
+      'Native feature integration',
+      'Smooth 60fps render loop',
     ],
   ),
   SpecializationItem(
     id: 'production-ui',
     title: 'Production-Ready UI',
     description:
-        'Translating complex Figma mockups into structured, responsive, and pixel-perfect Flutter widget trees.',
-    icon: '🎨',
+        'Translating Figma designs into responsive, pixel-perfect Flutter widget trees.',
+    icon: FontAwesomeIcons.palette,
     highlights: [
       'Strict design token adherence',
-      'Custom painter & complex layout math',
-      'Adaptive layouts for mobile & desktop',
-      'Implicit & explicit micro-animations',
+      'Adaptive mobile & desktop UI',
+      'Fluid micro-animations',
     ],
   ),
   SpecializationItem(
     id: 'backend-api',
     title: 'API & Backend Integration',
     description:
-        'Seamless integration with RESTful endpoints, Dio/http networking, JSON serialization, and Firebase ecosystem.',
-    icon: '⚡',
+        'Connecting RESTful endpoints, Dio networking, JSON parsing, and Firebase cloud services.',
+    icon: FontAwesomeIcons.bolt,
     highlights: [
-      'Robust Dio/http client & interceptors',
-      'Type-safe JSON serialization',
-      'Firebase Auth, Firestore & Realtime DB',
-      'Firebase Cloud Messaging (FCM) push alerts',
+      'Type-safe JSON parsing & Dio client',
+      'Firebase Auth & Firestore sync',
+      'FCM push notification alerts',
     ],
   ),
   SpecializationItem(
     id: 'architecture',
-    title: 'State Management & Architecture',
+    title: 'State & Architecture',
     description:
-        'Clean, scalable codebases structured around GetX, separation of concerns, and robust service layers.',
-    icon: '⚙️',
+        'Clean, scalable architecture powered by GetX, dependency injection, and decoupled logic.',
+    icon: FontAwesomeIcons.gears,
     highlights: [
-      'Reactive state management with GetX',
-      'Decoupled business & UI logic',
-      'Dependency injection & lazy loading',
-      'Local caching & persistent storage',
+      'Reactive state with GetX',
+      'Decoupled UI & business logic',
+      'Offline local data caching',
     ],
   ),
 ];
@@ -82,42 +79,42 @@ const List<ArchitectureLayerItem> kArchitectureLayers = [
     layerName: 'UI Layer',
     subtitle: 'Screen Views & Pages',
     description:
-        'Stateless/Stateful widgets handling user interaction and responsive layouts across platforms.',
+        'Stateless/Stateful widgets handling user interaction and responsive layouts.',
     components: ['Scaffold', 'LayoutBuilder', 'Navigation', 'Theme Tokens'],
   ),
   ArchitectureLayerItem(
     layerName: 'Reusable Widgets',
     subtitle: 'Design System Components',
     description:
-        'Atomic, self-contained UI components for buttons, input fields, cards, and custom indicators.',
+        'Atomic UI components for buttons, input fields, cards, and custom indicators.',
     components: ['Buttons', 'Modal Dialogs', 'Status Chips', 'Custom Cards'],
   ),
   ArchitectureLayerItem(
     layerName: 'State Management',
     subtitle: 'GetX Controllers & Reactive State',
     description:
-        'Centralized state controllers managing reactive variables, view states, and UI updates.',
+        'Centralized state controllers managing reactive variables and view updates.',
     components: ['GetxController', 'Rx Variables', 'Obx / GetBuilder', 'Worker Events'],
   ),
   ArchitectureLayerItem(
     layerName: 'Service Layer',
     subtitle: 'Business Logic & Operations',
     description:
-        'Abstracted services for network communication, auth logic, local caching, and notifications.',
+        'Abstracted services for network calls, auth logic, local caching, and notifications.',
     components: ['ApiService', 'AuthService', 'StorageService', 'NotificationService'],
   ),
   ArchitectureLayerItem(
     layerName: 'API / Firebase',
     subtitle: 'External Backend & Cloud',
     description:
-        'RESTful HTTP endpoints, Dio networking layers, Cloud Firestore, and FCM services.',
-    components: ['REST Endpoints', 'Cloud Firestore', 'FCM Push Notifications', 'Dio Client'],
+        'RESTful HTTP endpoints, Dio networking layers, Cloud Firestore, and FCM.',
+    components: ['REST Endpoints', 'Cloud Firestore', 'FCM Push Alerts', 'Dio Client'],
   ),
   ArchitectureLayerItem(
     layerName: 'Models / Data',
     subtitle: 'Type-Safe Data Structs',
     description:
-        'Strict Dart data classes with JSON serialization, factory constructors, and local storage keys.',
+        'Strict Dart data classes with JSON serialization and local storage keys.',
     components: ['Model Classes', 'fromJson / toJson', 'Shared Preferences', 'Local Cache'],
   ),
 ];
@@ -125,43 +122,43 @@ const List<ArchitectureLayerItem> kArchitectureLayers = [
 const List<EngineeringPrincipleItem> kEngineeringPrinciples = [
   EngineeringPrincipleItem(
     title: 'Reusable Widgets',
-    description: 'Modular UI design system preventing code duplication and keeping components DRY.',
-    icon: '🧱',
+    description: 'Modular UI components keeping code DRY.',
+    icon: FontAwesomeIcons.cubes,
   ),
   EngineeringPrincipleItem(
     title: 'Separation of Concerns',
-    description: 'UI rendering is completely decoupled from business logic and network communications.',
-    icon: '✂️',
+    description: 'UI rendering decoupled from business logic.',
+    icon: FontAwesomeIcons.scissors,
   ),
   EngineeringPrincipleItem(
     title: 'API Service Layer',
-    description: 'Centralized Dio/http clients with request interceptors, timeout handling, and error mapping.',
-    icon: '🌐',
+    description: 'Centralized Dio client with request interceptors.',
+    icon: FontAwesomeIcons.globe,
   ),
   EngineeringPrincipleItem(
-    title: 'Model-Based Data Handling',
-    description: 'Strict type safety with immutable Dart models and explicit serialization.',
-    icon: '📦',
+    title: 'Model-Based Data',
+    description: 'Type safety with immutable Dart models.',
+    icon: FontAwesomeIcons.boxArchive,
   ),
   EngineeringPrincipleItem(
-    title: 'GetX State Management',
-    description: 'Reactive data bindings ensuring pinpoint screen rebuilds without performance overhead.',
-    icon: '🔄',
+    title: 'GetX Reactive State',
+    description: 'Targeted screen rebuilds without overhead.',
+    icon: FontAwesomeIcons.rotate,
   ),
   EngineeringPrincipleItem(
-    title: 'Local Storage & Caching',
-    description: 'Device persistence via Shared Preferences for user settings and offline caching.',
-    icon: '💾',
+    title: 'Local Storage & Cache',
+    description: 'Shared Preferences for settings & offline cache.',
+    icon: FontAwesomeIcons.database,
   ),
   EngineeringPrincipleItem(
-    title: 'Responsive Layout Math',
-    description: 'Dynamic breakpoints and relative sizing ensuring smooth adaptability from mobile to desktop.',
-    icon: '📐',
+    title: 'Responsive Layouts',
+    description: 'Dynamic breakpoints for mobile and desktop.',
+    icon: FontAwesomeIcons.rulerCombined,
   ),
   EngineeringPrincipleItem(
     title: 'Error & Loading States',
-    description: 'Graceful fallback UI handling, skeleton loaders, and user-friendly error dialogs.',
-    icon: '🛡️',
+    description: 'Graceful fallback UI and error indicators.',
+    icon: FontAwesomeIcons.shieldHalved,
   ),
 ];
 
@@ -198,7 +195,7 @@ final List<SkillCategory> kSkillCategories = [
   SkillCategory(
     id: 'core-mobile',
     label: 'Core Mobile',
-    emoji: '📱',
+    icon: FontAwesomeIcons.mobileScreenButton,
     groupTitle: 'Core Mobile Development',
     items: const [
       SkillItem('Flutter SDK', level: 'Primary Stack', note: 'Cross-platform framework'),
@@ -218,7 +215,7 @@ final List<SkillCategory> kSkillCategories = [
   SkillCategory(
     id: 'state-management',
     label: 'State Management',
-    emoji: '⚙️',
+    icon: FontAwesomeIcons.gears,
     groupTitle: 'State Management & Architecture',
     items: const [
       SkillItem('GetX', level: 'Primary Architecture', note: 'State, Dependency Injection, Routing'),
@@ -236,7 +233,7 @@ final List<SkillCategory> kSkillCategories = [
   SkillCategory(
     id: 'backend-apis',
     label: 'Backend & APIs',
-    emoji: '🔥',
+    icon: FontAwesomeIcons.fire,
     groupTitle: 'Backend Services & REST APIs',
     items: const [
       SkillItem('RESTful APIs', level: 'Production Usage', note: 'HTTP methods, headers, authentication'),
@@ -255,7 +252,7 @@ final List<SkillCategory> kSkillCategories = [
   SkillCategory(
     id: 'design-ui',
     label: 'Design & UI/UX',
-    emoji: '🎨',
+    icon: FontAwesomeIcons.palette,
     groupTitle: 'UI/UX Implementation & Responsiveness',
     items: const [
       SkillItem('Figma to Flutter', level: 'Pixel-Perfect', note: 'Direct UI translation'),
@@ -272,7 +269,7 @@ final List<SkillCategory> kSkillCategories = [
   SkillCategory(
     id: 'local-storage',
     label: 'Storage & Cache',
-    emoji: '💾',
+    icon: FontAwesomeIcons.database,
     groupTitle: 'Local Storage & Device Persistence',
     items: const [
       SkillItem('Shared Preferences', level: 'Production Usage', note: 'Key-value persistence'),
@@ -287,7 +284,7 @@ final List<SkillCategory> kSkillCategories = [
   SkillCategory(
     id: 'dev-tools',
     label: 'Tools & Workflow',
-    emoji: '🛠️',
+    icon: FontAwesomeIcons.screwdriverWrench,
     groupTitle: 'Developer Tools & Professional Workflow',
     items: const [
       SkillItem('Git & GitHub', level: 'Daily Workflow', note: 'Version control, PRs, branching'),
@@ -307,7 +304,50 @@ final List<SkillCategory> kSkillCategories = [
 final List<ProjectItem> kProjects = [
   ProjectItem(
     num: '01',
-    emoji: '🕌',
+    icon: FontAwesomeIcons.bookOpen,
+    gradientStart: const Color(0xFF0D2B1A),
+    gradientEnd: const Color(0xFF145C30),
+    tags: const ['Flutter', 'GetX', 'Firebase', 'REST API'],
+    title: 'Quran Journal',
+    subtitle: 'Quran Reflection, Progress & Journaling Platform',
+    desc:
+        'A comprehensive Quranic companion app allowing users to read, reflect, record personal study notes, set reading milestones, and sync reflections safely across devices.',
+    problem:
+        'Creating an elegant, clutter-free reading environment that supports dual script rendering (Arabic typography + translation), offline offline journaling, and real-time cloud synchronization.',
+    myRole: 'Lead Flutter Developer',
+    contributionPoints: const [
+      'Built dual-script typography reader supporting custom Arabic fonts and translations.',
+      'Implemented local SQLite/Shared Preferences caching alongside Firebase Firestore data sync.',
+      'Engineered customizable journaling system with tagged notes and verse bookmarking.',
+      'Integrated RESTful Quran APIs with Dio client and JSON serialization.',
+      'Ensured 60fps smooth scrolling performance for high-density textual views.',
+    ],
+    features: const [
+      'Personalized Quranic journaling with notes, tags, and verse linkage',
+      'Reading goals, progress tracking analytics, and streak counters',
+      'Location-aware prayer time reminders and audio playback',
+      'Offline reading support with background cloud data sync',
+      'REST API integration with Dio networking layer',
+      'Responsive design supporting mobile, tablet, and dark mode',
+    ],
+    playStoreUrl: 'https://play.google.com/store/apps/details?id=com.dha.hp',
+    githubUrl: 'https://github.com/faireenazaidi',
+    caseStudyOverview:
+        'Quran Journal combines traditional text reading with personal reflective study. It features clean architectural breakdown using GetX controllers, Dio REST API integration, and Firebase authentication.',
+    architectureHighlights: const [
+      'Dio Client with caching interceptor',
+      'Custom Arabic font rendering pipeline',
+      'GetX reactive state for reading progress',
+    ],
+    previewImages: const [
+      'assets/projects/quran_1.png',
+      'assets/projects/quran_2.png',
+      'assets/projects/quran_3.png',
+    ],
+  ),
+  ProjectItem(
+    num: '02',
+    icon: FontAwesomeIcons.clock,
     gradientStart: const Color(0xFF0D1B2A),
     gradientEnd: const Color(0xFF1B3A5C),
     tags: const ['Flutter', 'Firebase', 'GetX', 'REST API'],
@@ -349,88 +389,8 @@ final List<ProjectItem> kProjects = [
     ],
   ),
   ProjectItem(
-    num: '02',
-    emoji: '📖',
-    gradientStart: const Color(0xFF0D2B1A),
-    gradientEnd: const Color(0xFF145C30),
-    tags: const ['Flutter', 'GetX', 'Firebase', 'REST API'],
-    title: 'Quran Journal',
-    subtitle: 'Quran Reflection, Progress & Journaling Platform',
-    desc:
-        'A comprehensive Quranic companion app allowing users to read, reflect, record personal study notes, set reading milestones, and sync reflections safely across devices.',
-    problem:
-        'Creating an elegant, clutter-free reading environment that supports dual script rendering (Arabic typography + translation), offline offline journaling, and real-time cloud synchronization.',
-    myRole: 'Lead Flutter Developer',
-    contributionPoints: const [
-      'Built dual-script typography reader supporting custom Arabic fonts and translations.',
-      'Implemented local SQLite/Shared Preferences caching alongside Firebase Firestore data sync.',
-      'Engineered customizable journaling system with tagged notes and verse bookmarking.',
-      'Integrated RESTful Quran APIs with Dio client and JSON serialization.',
-      'Ensured 60fps smooth scrolling performance for high-density textual views.',
-    ],
-    features: const [
-      'Personalized Quranic journaling with notes, tags, and verse linkage',
-      'Reading goals, progress tracking analytics, and streak counters',
-      'Location-aware prayer time reminders and audio playback',
-      'Offline reading support with background cloud data sync',
-      'REST API integration with Dio networking layer',
-      'Responsive design supporting mobile, tablet, and dark mode',
-    ],
-    playStoreUrl: 'https://play.google.com/store/apps/details?id=com.dha.hp',
-    githubUrl: 'https://github.com/faireenazaidi',
-    caseStudyOverview:
-        'Quran Journal combines traditional text reading with personal reflective study. It features clean architectural breakdown using GetX controllers, Dio REST API integration, and Firebase authentication.',
-    architectureHighlights: const [
-      'Dio Client with caching interceptor',
-      'Custom Arabic font rendering pipeline',
-      'GetX reactive state for reading progress',
-    ],
-    previewImages: const [
-      'assets/projects/quran_1.png',
-      'assets/projects/quran_2.png',
-      'assets/projects/quran_3.png',
-    ],
-  ),
-  // ProjectItem(
-  //   num: '03',
-  //   emoji: '🏥',
-  //   gradientStart: const Color(0xFF1A1A2E),
-  //   gradientEnd: const Color(0xFF16213E),
-  //   tags: const ['Flutter', 'Firebase', 'GetX', 'REST API'],
-  //   title: 'Health Parliament App',
-  //   subtitle: 'Healthcare Platform & Industry Network Application',
-  //   desc:
-  //       'Professional healthcare ecosystem app connecting medical experts and policy makers. Worked on stability enhancements, bug fixes, and core feature delivery.',
-  //   problem:
-  //       'Resolving legacy app crashes, optimizing state re-renders, and implementing new features without breaking existing user data or API contracts.',
-  //   myRole: 'Flutter Developer at Criterion Tech',
-  //   contributionPoints: const [
-  //     'Identified and fixed critical production UI bugs and layout overflow errors.',
-  //     'Refactored legacy state handlers to GetX reactive architecture for smooth re-rendering.',
-  //     'Implemented new feature modules for user profiles and healthcare news feeds.',
-  //     'Integrated Firebase Analytics and Crashlytics for real-time monitoring.',
-  //     'Tested across 15+ physical Android device configurations for quality assurance.',
-  //   ],
-  //   features: const [
-  //     'Fixed critical production bugs and improved app stability',
-  //     'Refactored state management for faster screen load times',
-  //     'Delivered new profile and content feed modules end-to-end',
-  //     'Firebase backend data sync and push notification support',
-  //     'Live on Google Play Store with thousands of active downloads',
-  //   ],
-  //   playStoreUrl: 'https://play.google.com/store/apps/details?id=com.dha.hp',
-  //   githubUrl: 'https://github.com/faireenazaidi',
-  //   caseStudyOverview:
-  //       'Health Parliament App is a flagship healthcare domain app. Through structured refactoring and feature additions, performance was significantly improved.',
-  //   architectureHighlights: const [
-  //     'GetX Dependency Injection',
-  //     'Firebase Crashlytics monitoring',
-  //     'Responsive list builders with lazy loading',
-  //   ],
-  // ),
-  ProjectItem(
     num: '03',
-    emoji: '📚',
+    icon: FontAwesomeIcons.graduationCap,
     gradientStart: const Color(0xFF2B0D1A),
     gradientEnd: const Color(0xFF591438),
     tags: const ['Flutter', 'Dart', 'Custom UI', 'GetX'],

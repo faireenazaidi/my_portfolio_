@@ -19,9 +19,8 @@ class ResumeCtaSection extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 60, horizontal: 32),
       color: AppTheme.bg(isDark),
-      child: Center(
+      child: MaxContentContainer(
         child: Container(
-          constraints: const BoxConstraints(maxWidth: 1100),
           padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 40),
           decoration: BoxDecoration(
             gradient: LinearGradient(
@@ -33,7 +32,7 @@ class ResumeCtaSection extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
-                color: AppTheme.acc(isDark).withOpacity(0.15),
+                color: AppTheme.acc(isDark).withValues(alpha: 0.15),
                 blurRadius: 36,
                 offset: const Offset(0, 12),
               ),

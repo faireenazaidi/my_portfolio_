@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../theme/app_theme.dart';
@@ -95,32 +96,36 @@ class _HeroSectionState extends State<HeroSection>
 
   @override
   Widget build(BuildContext context) {
-    final isWide = MediaQuery.of(context).size.width > 900;
+    final w = MediaQuery.of(context).size.width;
+    final isWide = w > 900;
+    final isMobile = w <= 600;
+
     return Container(
       color: AppTheme.bg(widget.isDark),
-      constraints: const BoxConstraints(minHeight: 640),
+      constraints: BoxConstraints(minHeight: isMobile ? 480 : 640),
       child: Stack(
         children: [
           // Background watermark
-          Positioned(
-            bottom: -20,
-            right: -10,
-            child: IgnorePointer(
-              child: Text(
-                'FLUTTER',
-                style: GoogleFonts.bebasNeue(
-                  fontSize: 210,
-                  color: Colors.transparent,
-                  height: 1,
-                ).copyWith(
-                  foreground: Paint()
-                    ..style = PaintingStyle.stroke
-                    ..strokeWidth = 1
-                    ..color = AppTheme.line(widget.isDark),
+          if (!isMobile)
+            Positioned(
+              bottom: -20,
+              right: -10,
+              child: IgnorePointer(
+                child: Text(
+                  'FLUTTER',
+                  style: GoogleFonts.bebasNeue(
+                    fontSize: 210,
+                    color: Colors.transparent,
+                    height: 1,
+                  ).copyWith(
+                    foreground: Paint()
+                      ..style = PaintingStyle.stroke
+                      ..strokeWidth = 1
+                      ..color = AppTheme.line(widget.isDark),
+                  ),
                 ),
               ),
             ),
-          ),
           // Right border line
           Positioned(
             top: 0,
@@ -132,27 +137,31 @@ class _HeroSectionState extends State<HeroSection>
             opacity: _fadeAnim,
             child: SlideTransition(
               position: _slideAnim,
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 32, vertical: 48),
-                child: isWide
-                    ? Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Expanded(child: _buildLeft()),
-                          const SizedBox(width: 48),
-                          _buildIdeCard(),
-                          const SizedBox(width: 16),
-                        ],
-                      )
-                    : Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _buildLeft(),
-                          const SizedBox(height: 40),
-                          _buildIdeCard(),
-                        ],
-                      ),
+              child: MaxContentContainer(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: isMobile ? 16 : 32,
+                    vertical: isMobile ? 32 : 48,
+                  ),
+                  child: isWide
+                      ? Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Expanded(child: _buildLeft(isMobile)),
+                            const SizedBox(width: 48),
+                            _buildIdeCard(isMobile),
+                            const SizedBox(width: 16),
+                          ],
+                        )
+                      : Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _buildLeft(isMobile),
+                            const SizedBox(height: 32),
+                            _buildIdeCard(isMobile),
+                          ],
+                        ),
+                ),
               ),
             ),
           ),
@@ -161,7 +170,7 @@ class _HeroSectionState extends State<HeroSection>
     );
   }
 
-  Widget _buildLeft() {
+  Widget _buildLeft(bool isMobile) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -182,7 +191,7 @@ class _HeroSectionState extends State<HeroSection>
               Text(
                 'AVAILABLE FOR OPPORTUNITIES',
                 style: GoogleFonts.ibmPlexMono(
-                  fontSize: 11,
+                  fontSize: isMobile ? 10 : 11,
                   color: AppTheme.acc(widget.isDark),
                   letterSpacing: 1,
                   fontWeight: FontWeight.bold,
@@ -191,23 +200,23 @@ class _HeroSectionState extends State<HeroSection>
             ],
           ),
         ),
-        const SizedBox(height: 24),
+        const SizedBox(height: 20),
 
         // Strong Hierarchy Header
         Text(
           'FLUTTER DEVELOPER',
           style: GoogleFonts.ibmPlexMono(
-            fontSize: 14,
+            fontSize: isMobile ? 12 : 14,
             fontWeight: FontWeight.bold,
-            letterSpacing: 3,
+            letterSpacing: isMobile ? 2 : 3,
             color: AppTheme.acc(widget.isDark),
           ),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 6),
         RichText(
           text: TextSpan(
             style: GoogleFonts.bebasNeue(
-              fontSize: 76,
+              fontSize: isMobile ? 48 : 76,
               letterSpacing: 2,
               height: 0.92,
               color: AppTheme.ink(widget.isDark),
@@ -222,38 +231,38 @@ class _HeroSectionState extends State<HeroSection>
             ],
           ),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 14),
 
         // Tagline & Typing role
         Row(
           children: [
             Container(
-                width: 32, height: 1.5, color: AppTheme.acc(widget.isDark)),
-            const SizedBox(width: 12),
+                width: 24, height: 1.5, color: AppTheme.acc(widget.isDark)),
+            const SizedBox(width: 10),
             _TypingText(typed: _typed, isDark: widget.isDark),
           ],
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: 16),
 
         // Description / Value Proposition
         ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 580),
           child: Text(
-            'Building production-ready cross-platform experiences for Android & iOS. Flutter Developer at Criterion Tech Pvt Ltd, specializing in pixel-perfect Figma UI translation, REST APIs, GetX architecture, and Firebase backend integration.',
+            'Flutter Developer at Criterion Tech Pvt Ltd. Crafting production-grade cross-platform apps for Android & iOS with pixel-perfect Figma UI, REST APIs, GetX, and Firebase.',
             style: GoogleFonts.epilogue(
-              fontSize: 15,
+              fontSize: isMobile ? 14 : 15,
               color: AppTheme.ink2(widget.isDark),
               fontWeight: FontWeight.w300,
-              height: 1.7,
+              height: 1.6,
             ),
           ),
         ),
-        const SizedBox(height: 32),
+        const SizedBox(height: 24),
 
         // CTA Buttons
         Wrap(
-          spacing: 12,
-          runSpacing: 12,
+          spacing: 10,
+          runSpacing: 10,
           children: [
             OrangeButton(
               label: 'VIEW MY WORK ➔',
@@ -261,7 +270,7 @@ class _HeroSectionState extends State<HeroSection>
               isDark: widget.isDark,
             ),
             OutlineButton2(
-              label: '↓ DOWNLOAD RESUME',
+              label: '↓ RESUME',
               isDark: widget.isDark,
               onTap: () async {
                 final url = Uri.parse(
@@ -277,7 +286,7 @@ class _HeroSectionState extends State<HeroSection>
             ),
           ],
         ),
-        const SizedBox(height: 32),
+        const SizedBox(height: 24),
 
         // Social Icons Row
         Row(
@@ -292,28 +301,28 @@ class _HeroSectionState extends State<HeroSection>
             ),
             const SizedBox(width: 8),
             SocialBtn(
-              icon: const Icon(Icons.code),
+              icon: const Icon(FontAwesomeIcons.github, size: 16),
               tooltip: 'GitHub Profile',
               isDark: widget.isDark,
-              onTap: () => launchUrl(Uri.parse('https://github.com/')),
+              onTap: () => launchUrl(Uri.parse('https://github.com/faireenazaidi')),
             ),
             const SizedBox(width: 10),
             SocialBtn(
-              icon: const Icon(Icons.work_outline),
+              icon: const Icon(FontAwesomeIcons.linkedinIn, size: 16),
               tooltip: 'LinkedIn Profile',
               isDark: widget.isDark,
               onTap: () => launchUrl(Uri.parse('https://linkedin.com/in/')),
             ),
             const SizedBox(width: 10),
             SocialBtn(
-              icon: const Icon(Icons.email_outlined),
+              icon: const Icon(FontAwesomeIcons.envelope, size: 16),
               tooltip: 'Send Email',
               isDark: widget.isDark,
               onTap: () => launchUrl(Uri.parse('mailto:fairenazaidi@gmail.com')),
             ),
             const SizedBox(width: 10),
             SocialBtn(
-              icon: const Icon(Icons.chat_bubble_outline),
+              icon: const Icon(FontAwesomeIcons.whatsapp, size: 16),
               tooltip: 'WhatsApp Chat',
               isDark: widget.isDark,
               onTap: () => launchUrl(Uri.parse('https://wa.me/918173822136')),
@@ -324,16 +333,16 @@ class _HeroSectionState extends State<HeroSection>
     );
   }
 
-  Widget _buildIdeCard() {
+  Widget _buildIdeCard(bool isMobile) {
     return Container(
-      width: 360,
+      width: isMobile ? double.infinity : 360,
       decoration: BoxDecoration(
         color: AppTheme.cardBg(widget.isDark),
         border: Border.all(color: AppTheme.line(widget.isDark)),
         borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.12),
+            color: Colors.black.withValues(alpha: 0.12),
             blurRadius: 30,
             offset: const Offset(0, 10),
           ),

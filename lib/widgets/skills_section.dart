@@ -27,35 +27,37 @@ class _SkillsSectionState extends State<SkillsSection> {
         color: AppTheme.bg2(widget.isDark),
         border: Border(top: BorderSide(color: AppTheme.line(widget.isDark))),
       ),
-      child: Column(
-        children: [
-          SectionHeader(
-            tag: 'Technical Capabilities',
-            title: 'Skills & Tech Stack',
-            subtitle:
-                'Technologies, frameworks, and workflow tools used in production applications — zero fluff or artificial percentages.',
-            isDark: widget.isDark,
-            alignment: CrossAxisAlignment.center,
-          ),
-          const SizedBox(height: 48),
-          isWide
-              ? Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(width: 280, child: _buildNav()),
-                    const SizedBox(width: 48),
-                    Expanded(child: _buildPanel(cat)),
-                  ],
-                )
-              : Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildNavWrap(),
-                    const SizedBox(height: 24),
-                    _buildPanel(cat),
-                  ],
-                ),
-        ],
+      child: MaxContentContainer(
+        child: Column(
+          children: [
+            SectionHeader(
+              tag: 'Technical Capabilities',
+              title: 'Skills & Tech Stack',
+              subtitle:
+                  'Technologies, frameworks, and workflow tools used in production applications — zero fluff or artificial percentages.',
+              isDark: widget.isDark,
+              alignment: CrossAxisAlignment.center,
+            ),
+            const SizedBox(height: 48),
+            isWide
+                ? Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(width: 280, child: _buildNav()),
+                      const SizedBox(width: 48),
+                      Expanded(child: _buildPanel(cat)),
+                    ],
+                  )
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildNavWrap(),
+                      const SizedBox(height: 24),
+                      _buildPanel(cat),
+                    ],
+                  ),
+          ],
+        ),
       ),
     );
   }
@@ -66,7 +68,8 @@ class _SkillsSectionState extends State<SkillsSection> {
         final i = e.key;
         final cat = e.value;
         return _SkillTab(
-          label: '${cat.emoji}  ${cat.label}',
+          label: cat.label,
+          icon: cat.icon,
           isActive: _selected == i,
           isDark: widget.isDark,
           onTap: () => setState(() => _selected = i),
@@ -83,7 +86,8 @@ class _SkillsSectionState extends State<SkillsSection> {
         final i = e.key;
         final cat = e.value;
         return _SkillTab(
-          label: '${cat.emoji} ${cat.label}',
+          label: cat.label,
+          icon: cat.icon,
           isActive: _selected == i,
           isDark: widget.isDark,
           onTap: () => setState(() => _selected = i),
@@ -107,6 +111,7 @@ class _SkillsSectionState extends State<SkillsSection> {
 
 class _SkillTab extends StatefulWidget {
   final String label;
+  final IconData icon;
   final bool isActive;
   final bool isDark;
   final VoidCallback onTap;
@@ -114,6 +119,7 @@ class _SkillTab extends StatefulWidget {
 
   const _SkillTab({
     required this.label,
+    required this.icon,
     required this.isActive,
     required this.isDark,
     required this.onTap,
@@ -154,14 +160,25 @@ class _SkillTabState extends State<_SkillTab> {
             ),
             borderRadius: BorderRadius.circular(6),
           ),
-          child: Text(
-            widget.label,
-            style: GoogleFonts.epilogue(
-              fontSize: widget.compact ? 12 : 14,
-              fontWeight: FontWeight.w600,
-              letterSpacing: 0.3,
-              color: active ? AppTheme.acc(isDark) : AppTheme.ink3(isDark),
-            ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                widget.icon,
+                size: widget.compact ? 13 : 15,
+                color: active ? AppTheme.acc(isDark) : AppTheme.ink3(isDark),
+              ),
+              const SizedBox(width: 10),
+              Text(
+                widget.label,
+                style: GoogleFonts.epilogue(
+                  fontSize: widget.compact ? 12 : 14,
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: 0.3,
+                  color: active ? AppTheme.acc(isDark) : AppTheme.ink3(isDark),
+                ),
+              ),
+            ],
           ),
         ),
       ),
@@ -189,8 +206,23 @@ class _SkillPanel extends StatelessWidget {
         children: [
           Row(
             children: [
-              Text(cat.emoji, style: const TextStyle(fontSize: 24)),
-              const SizedBox(width: 10),
+              Container(
+                width: 38,
+                height: 38,
+                decoration: BoxDecoration(
+                  color: AppTheme.orangeDim(isDark),
+                  border: Border.all(color: AppTheme.orangeMid(isDark)),
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: Center(
+                  child: Icon(
+                    cat.icon,
+                    size: 18,
+                    color: AppTheme.acc(isDark),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 12),
               Expanded(
                 child: Text(
                   cat.groupTitle.toUpperCase(),

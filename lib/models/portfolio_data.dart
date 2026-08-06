@@ -1,4 +1,4 @@
-import 'dart:ui';
+import 'package:flutter/widgets.dart';
 
 class SkillItem {
   final String name;
@@ -10,14 +10,14 @@ class SkillItem {
 class SkillCategory {
   final String id;
   final String label;
-  final String emoji;
+  final IconData icon;
   final String groupTitle;
   final List<SkillItem> items;
   final List<String> tags;
   const SkillCategory({
     required this.id,
     required this.label,
-    required this.emoji,
+    required this.icon,
     required this.groupTitle,
     required this.items,
     required this.tags,
@@ -39,7 +39,7 @@ class TimelineItem {
 
 class ProjectItem {
   final String num;
-  final String emoji;
+  final IconData icon;
   final Color gradientStart;
   final Color gradientEnd;
   final List<String> tags;
@@ -58,7 +58,7 @@ class ProjectItem {
 
   const ProjectItem({
     required this.num,
-    required this.emoji,
+    required this.icon,
     required this.gradientStart,
     required this.gradientEnd,
     required this.tags,
@@ -81,7 +81,7 @@ class SpecializationItem {
   final String id;
   final String title;
   final String description;
-  final String icon;
+  final IconData icon;
   final List<String> highlights;
 
   const SpecializationItem({
@@ -110,7 +110,7 @@ class ArchitectureLayerItem {
 class EngineeringPrincipleItem {
   final String title;
   final String description;
-  final String icon;
+  final IconData icon;
 
   const EngineeringPrincipleItem({
     required this.title,

@@ -22,54 +22,56 @@ class ProjectsSection extends StatelessWidget {
         color: AppTheme.bg2(isDark),
         border: Border(top: BorderSide(color: AppTheme.line(isDark))),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SectionHeader(
-            tag: 'Featured Work',
-            title: "Things I've Shipped",
-            subtitle:
-                'Production mobile applications engineered at Criterion Tech Pvt Ltd — deployed live on the Google Play Store.',
-            isDark: isDark,
-          ),
-          const SizedBox(height: 20),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
-            decoration: BoxDecoration(
-              color: AppTheme.orangeDim(isDark),
-              border: Border.all(color: AppTheme.orangeMid(isDark)),
-              borderRadius: BorderRadius.circular(4),
+      child: MaxContentContainer(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SectionHeader(
+              tag: 'Featured Work',
+              title: "Things I've Shipped",
+              subtitle:
+                  'Production mobile applications engineered at Criterion Tech Pvt Ltd — deployed live on the Google Play Store.',
+              isDark: isDark,
             ),
-            child: Text(
-              '◆  Live Play Store Apps · Flutter · GetX · Firebase · REST APIs · Production Architecture',
-              style: GoogleFonts.ibmPlexMono(
-                fontSize: 11,
-                letterSpacing: 0.8,
-                color: AppTheme.acc(isDark),
-                fontWeight: FontWeight.w500,
+            const SizedBox(height: 20),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+              decoration: BoxDecoration(
+                color: AppTheme.orangeDim(isDark),
+                border: Border.all(color: AppTheme.orangeMid(isDark)),
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: Text(
+                '◆  Live Play Store Apps · Flutter · GetX · Firebase · REST APIs · Production Architecture',
+                style: GoogleFonts.ibmPlexMono(
+                  fontSize: 11,
+                  letterSpacing: 0.8,
+                  color: AppTheme.acc(isDark),
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ),
-          ),
-          const SizedBox(height: 36),
-          // Projects Grid
-          LayoutBuilder(builder: (ctx, constraints) {
-            final cardW =
-                (constraints.maxWidth - (cols - 1) * 20) / cols;
-            return Wrap(
-              spacing: 20,
-              runSpacing: 20,
-              children: kProjects
-                  .map((p) => SizedBox(
-                        width: cardW,
-                        child: _ProjectCard(
-                          project: p,
-                          isDark: isDark,
-                        ),
-                      ))
-                  .toList(),
-            );
-          }),
-        ],
+            const SizedBox(height: 36),
+            // Projects Grid
+            LayoutBuilder(builder: (ctx, constraints) {
+              final cardW =
+                  (constraints.maxWidth - (cols - 1) * 20) / cols;
+              return Wrap(
+                spacing: 20,
+                runSpacing: 20,
+                children: kProjects
+                    .map((p) => SizedBox(
+                          width: cardW,
+                          child: _ProjectCard(
+                            project: p,
+                            isDark: isDark,
+                          ),
+                        ))
+                    .toList(),
+              );
+            }),
+          ],
+        ),
       ),
     );
   }
@@ -108,7 +110,7 @@ class _ProjectCardState extends State<_ProjectCard> {
           boxShadow: _hover
               ? [
                   BoxShadow(
-                    color: AppTheme.acc(isDark).withOpacity(0.12),
+                    color: AppTheme.acc(isDark).withValues(alpha: 0.12),
                     blurRadius: 36,
                     offset: const Offset(0, 14),
                   )
@@ -324,14 +326,14 @@ class _ProjectDevicePreviewState extends State<ProjectDevicePreview> {
                           color: isSel
                               ? AppTheme.acc(widget.isDark)
                               : (widget.isDark
-                                  ? Colors.white.withOpacity(0.08)
-                                  : Colors.black.withOpacity(0.06)),
+                                  ? Colors.white.withValues(alpha: 0.08)
+                                  : Colors.black.withValues(alpha: 0.06)),
                           border: Border.all(
                             color: isSel
                                 ? AppTheme.acc(widget.isDark)
                                 : (widget.isDark
-                                    ? Colors.white.withOpacity(0.15)
-                                    : Colors.black.withOpacity(0.12)),
+                                    ? Colors.white.withValues(alpha: 0.15)
+                                    : Colors.black.withValues(alpha: 0.12)),
                           ),
                           borderRadius: BorderRadius.circular(12),
                         ),
@@ -344,8 +346,8 @@ class _ProjectDevicePreviewState extends State<ProjectDevicePreview> {
                             color: isSel
                                 ? Colors.white
                                 : (widget.isDark
-                                    ? Colors.white.withOpacity(0.7)
-                                    : Colors.black.withOpacity(0.7)),
+                                    ? Colors.white.withValues(alpha: 0.7)
+                                    : Colors.black.withValues(alpha: 0.7)),
                           ),
                         ),
                       ),
@@ -359,8 +361,11 @@ class _ProjectDevicePreviewState extends State<ProjectDevicePreview> {
               child: hasImages
                   ? _buildInteractiveRotationalShowcase(images)
                   : Center(
-                      child:
-                          Text(p.emoji, style: const TextStyle(fontSize: 48)),
+                      child: Icon(
+                        p.icon,
+                        size: 48,
+                        color: AppTheme.acc(widget.isDark),
+                      ),
                     ),
             ),
           ],
@@ -472,18 +477,18 @@ class _ProjectDevicePreviewState extends State<ProjectDevicePreview> {
         border: Border.all(
           color: isCenter
               ? AppTheme.acc(isDark)
-              : Colors.white.withOpacity(0.25),
+              : Colors.white.withValues(alpha: 0.25),
           width: isCenter ? 2.5 : 1.8,
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(isCenter ? 0.45 : 0.32),
+            color: Colors.black.withValues(alpha: isCenter ? 0.45 : 0.32),
             blurRadius: isCenter ? 22 : 14,
             offset: Offset(0, isCenter ? 10 : 6),
           ),
           if (isCenter)
             BoxShadow(
-              color: AppTheme.acc(isDark).withOpacity(0.28),
+              color: AppTheme.acc(isDark).withValues(alpha: 0.28),
               blurRadius: 18,
               offset: const Offset(0, 4),
             ),
@@ -506,9 +511,10 @@ class _ProjectDevicePreviewState extends State<ProjectDevicePreview> {
                   fit: BoxFit.cover,
                   alignment: Alignment.topCenter,
                   errorBuilder: (ctx2, err2, stack2) => Center(
-                    child: Text(
-                      widget.project.emoji,
-                      style: const TextStyle(fontSize: 28),
+                    child: Icon(
+                      widget.project.icon,
+                      size: 28,
+                      color: AppTheme.acc(widget.isDark),
                     ),
                   ),
                 ),
@@ -519,7 +525,7 @@ class _ProjectDevicePreviewState extends State<ProjectDevicePreview> {
             if (!isCenter)
               Positioned.fill(
                 child: Container(
-                  color: Colors.black.withOpacity(0.12),
+                  color: Colors.black.withValues(alpha: 0.12),
                 ),
               ),
 
@@ -533,7 +539,7 @@ class _ProjectDevicePreviewState extends State<ProjectDevicePreview> {
                   width: 26,
                   height: 3.5,
                   decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.85),
+                    color: Colors.black.withValues(alpha: 0.85),
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),

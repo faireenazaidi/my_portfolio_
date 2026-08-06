@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../theme/app_theme.dart';
 import '../models/content.dart';
 import '../models/portfolio_data.dart';
+import 'common_widgets.dart';
 
 class StatsSection extends StatelessWidget {
   final bool isDark;
@@ -16,21 +17,23 @@ class StatsSection extends StatelessWidget {
 
     return Container(
       color: bgColor,
-      child: LayoutBuilder(builder: (ctx, constraints) {
-        final itemW = constraints.maxWidth / cols;
-        return Wrap(
-          children: kStats.asMap().entries.map((e) {
-            final i = e.key;
-            final s = e.value;
-            return _StatItem(
-              stat: s,
-              isDark: isDark,
-              width: itemW,
-              showRightBorder: (i + 1) % cols != 0,
-            );
-          }).toList(),
-        );
-      }),
+      child: MaxContentContainer(
+        child: LayoutBuilder(builder: (ctx, constraints) {
+          final itemW = constraints.maxWidth / cols;
+          return Wrap(
+            children: kStats.asMap().entries.map((e) {
+              final i = e.key;
+              final s = e.value;
+              return _StatItem(
+                stat: s,
+                isDark: isDark,
+                width: itemW,
+                showRightBorder: (i + 1) % cols != 0,
+              );
+            }).toList(),
+          );
+        }),
+      ),
     );
   }
 }
@@ -62,7 +65,7 @@ class _StatItemState extends State<_StatItem> {
         : const Color(0xFFF5F2EC);
     final labelColor = widget.isDark
         ? AppTheme.ink3Dark
-        : const Color(0xFFF5F2EC).withOpacity(0.5);
+        : const Color(0xFFF5F2EC).withValues(alpha: 0.5);
 
     return MouseRegion(
       onEnter: (_) => setState(() => _hover = true),
@@ -73,14 +76,14 @@ class _StatItemState extends State<_StatItem> {
         padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 24),
         decoration: BoxDecoration(
           color: _hover
-              ? AppTheme.acc(widget.isDark).withOpacity(0.08)
+              ? AppTheme.acc(widget.isDark).withValues(alpha: 0.08)
               : Colors.transparent,
           border: Border(
             right: widget.showRightBorder
                 ? BorderSide(
                     color: widget.isDark
                         ? AppTheme.line(widget.isDark)
-                        : Colors.white.withOpacity(0.1))
+                        : Colors.white.withValues(alpha: 0.1))
                 : BorderSide.none,
           ),
         ),
